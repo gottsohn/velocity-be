@@ -17,6 +17,7 @@ import { RouteMap } from '../components/RouteMap';
 import { StatsPanel } from '../components/StatsPanel';
 import { ConnectionStatus } from '../components/ConnectionStatus';
 import { StreamClosed } from '../components/StreamClosed';
+import { StreamPaused } from '../components/StreamPaused';
 
 interface DashboardProps {
   streamId: string;
@@ -154,9 +155,12 @@ export function Dashboard({ streamId }: DashboardProps) {
                           border: colorScheme === 'dark'
                             ? '1px solid rgba(255, 255, 255, 0.1)'
                             : '1px solid rgba(0, 0, 0, 0.1)',
+                          position: 'relative',
                         }}
                       >
                         <RouteMap streamData={streamData} />
+                        {/* Stream paused overlay */}
+                        {streamData?.isPaused && <StreamPaused />}
                       </Paper>
                     )}
                   </Transition>

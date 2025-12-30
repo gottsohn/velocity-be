@@ -27,6 +27,7 @@ export interface StreamData {
   endCity: string;
   expectedDistanceKm?: number;
   car: Car;
+  isPaused: boolean;
 }
 
 export interface WebSocketMessage {

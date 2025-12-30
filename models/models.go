@@ -38,6 +38,7 @@ type StreamData struct {
 	EndCity            string          `json:"endCity" bson:"endCity"`
 	ExpectedDistanceKm *float64        `json:"expectedDistanceKm,omitempty" bson:"expectedDistanceKm,omitempty"`
 	Car                Car             `json:"car" bson:"car"`
+	IsPaused           bool            `json:"isPaused" bson:"isPaused"`
 }
 
 // Stream represents an active streaming session

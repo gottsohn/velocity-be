@@ -128,10 +128,15 @@ make run-frontend
       "name": "Tesla",
       "model": "Model S",
       "horsePower": 670
-    }
+    },
+    "isPaused": false
   }
 }
 ```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `isPaused` | boolean | When `true`, the frontend displays a "Stream Paused" overlay on the map |
 
 ### Viewer Count Update (to Mobile App)
 
