@@ -48,6 +48,7 @@ func main() {
 		// Stream management
 		api.POST("/streams", handlers.CreateStreamHandler)
 		api.GET("/streams/:streamId", handlers.GetStreamHandler)
+		api.DELETE("/streams/:streamId", handlers.DeleteStreamHandler(wsHub))
 	}
 
 	// WebSocket routes

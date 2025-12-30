@@ -30,8 +30,8 @@ export interface StreamData {
 }
 
 export interface WebSocketMessage {
-  type: 'stream_data' | 'viewer_count' | 'error';
+  type: 'stream_data' | 'viewer_count' | 'error' | 'stream_closed';
   payload: StreamData | { viewerCount: number } | { message: string };
 }
 
-export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected' | 'error';
+export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected' | 'error' | 'closed';

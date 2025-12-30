@@ -68,6 +68,57 @@ func GetStreamHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, stream)
 }
 
+// DeleteStreamHandler soft deletes a stream and closes all connections
+func DeleteStreamHandler(h *hub.Hub) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		streamID := c.Param("streamId")
+
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		// Check if stream exists
+		var stream models.Stream
+		err := db.StreamsCollection().FindOne(ctx, bson.M{"streamId": streamID}).Decode(&stream)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Stream not found"})
+			return
+		}
+
+		// Check if already deleted
+		if stream.DeletedAt != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Stream already deleted"})
+			return
+		}
+
+		// Soft delete by setting deletedAt
+		now := time.Now()
+		_, err = db.StreamsCollection().UpdateOne(
+			ctx,
+			bson.M{"streamId": streamID},
+			bson.M{
+				"$set": bson.M{
+					"deletedAt": now,
+					"isActive":  false,
+					"updatedAt": now,
+				},
+			},
+		)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete stream"})
+			return
+		}
+
+		// Close all connections for this stream
+		h.CloseStream(streamID)
+
+		c.JSON(http.StatusOK, gin.H{
+			"message":   "Stream deleted successfully",
+			"streamId":  streamID,
+			"deletedAt": now,
+		})
+	}
+}
+
 // MobileWebSocketHandler handles WebSocket connections from mobile app (broadcaster)
 func MobileWebSocketHandler(h *hub.Hub) gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -77,7 +128,7 @@ func MobileWebSocketHandler(h *hub.Hub) gin.HandlerFunc {
 			return
 		}
 
-		// Verify stream exists
+		// Verify stream exists and is not deleted
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
@@ -85,6 +136,12 @@ func MobileWebSocketHandler(h *hub.Hub) gin.HandlerFunc {
 		err := db.StreamsCollection().FindOne(ctx, bson.M{"streamId": streamID}).Decode(&stream)
 		if err != nil {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Stream not found"})
+			return
+		}
+
+		// Check if stream is deleted
+		if stream.DeletedAt != nil {
+			c.JSON(http.StatusGone, gin.H{"error": "Stream has been closed"})
 			return
 		}
 
@@ -116,6 +173,23 @@ func ViewerWebSocketHandler(h *hub.Hub) gin.HandlerFunc {
 		streamID := c.Param("streamId")
 		if streamID == "" {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Stream ID required"})
+			return
+		}
+
+		// Verify stream exists and is not deleted
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		var stream models.Stream
+		err := db.StreamsCollection().FindOne(ctx, bson.M{"streamId": streamID}).Decode(&stream)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "Stream not found"})
+			return
+		}
+
+		// Check if stream is deleted
+		if stream.DeletedAt != nil {
+			c.JSON(http.StatusGone, gin.H{"error": "Stream has been closed"})
 			return
 		}
 

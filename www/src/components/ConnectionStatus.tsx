@@ -13,6 +13,7 @@ export function ConnectionStatus({ status, onReconnect }: ConnectionStatusProps)
       case 'connecting': return 'yellow';
       case 'disconnected': return 'gray';
       case 'error': return 'red';
+      case 'closed': return 'red';
     }
   };
 
@@ -22,6 +23,7 @@ export function ConnectionStatus({ status, onReconnect }: ConnectionStatusProps)
       case 'connecting': return 'Connecting...';
       case 'disconnected': return 'Disconnected';
       case 'error': return 'Connection Error';
+      case 'closed': return 'Stream Closed';
     }
   };
 

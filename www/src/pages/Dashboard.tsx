@@ -16,19 +16,25 @@ import { useWebSocket } from '../hooks/useWebSocket';
 import { RouteMap } from '../components/RouteMap';
 import { StatsPanel } from '../components/StatsPanel';
 import { ConnectionStatus } from '../components/ConnectionStatus';
+import { StreamClosed } from '../components/StreamClosed';
 
 interface DashboardProps {
   streamId: string;
 }
 
 export function Dashboard({ streamId }: DashboardProps) {
-  const { streamData, status, error, reconnect } = useWebSocket(streamId);
+  const { streamData, status, error, reconnect, isStreamClosed } = useWebSocket(streamId);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Show StreamClosed component when stream is closed
+  if (isStreamClosed) {
+    return <StreamClosed streamId={streamId} />;
+  }
 
   return (
     <Box
@@ -112,7 +118,7 @@ export function Dashboard({ streamId }: DashboardProps) {
               </Paper>
 
               {/* Error message */}
-              {error && (
+              {error && !isStreamClosed && (
                 <Paper 
                   p="md" 
                   radius="md" 

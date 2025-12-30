@@ -88,6 +88,7 @@ make run-frontend
 |--------|----------|-------------|
 | POST | `/api/streams` | Create a new stream ID |
 | GET | `/api/streams/:streamId` | Get stream info |
+| DELETE | `/api/streams/:streamId` | Soft delete stream and close all connections |
 
 ### WebSocket Endpoints
 
@@ -142,6 +143,26 @@ make run-frontend
     "viewerCount": 5
   }
 }
+```
+
+### Delete Stream Response
+
+```json
+// Success (200 OK)
+{
+  "message": "Stream deleted successfully",
+  "streamId": "abc12345",
+  "deletedAt": "2025-12-30T10:30:00Z"
+}
+
+// Stream not found (404)
+{ "error": "Stream not found" }
+
+// Already deleted (400)
+{ "error": "Stream already deleted" }
+
+// Connecting to deleted stream (410 Gone)
+{ "error": "Stream has been closed" }
 ```
 
 ## Environment Variables

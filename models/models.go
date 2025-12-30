@@ -46,6 +46,7 @@ type Stream struct {
 	StreamID    string             `json:"streamId" bson:"streamId"`
 	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
 	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
+	DeletedAt   *time.Time         `json:"deletedAt,omitempty" bson:"deletedAt,omitempty"`
 	IsActive    bool               `json:"isActive" bson:"isActive"`
 	LatestData  *StreamData        `json:"latestData,omitempty" bson:"latestData,omitempty"`
 	ViewerCount int                `json:"viewerCount" bson:"viewerCount"`

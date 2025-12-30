@@ -213,6 +213,39 @@ func (h *Hub) GetViewerCount(streamID string) int {
 	return 0
 }
 
+// CloseStream closes all connections for a specific stream
+func (h *Hub) CloseStream(streamID string) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
+	streamHub, exists := h.Streams[streamID]
+	if !exists {
+		return
+	}
+
+	log.Printf("Closing stream %s and disconnecting all clients", streamID)
+
+	// Close broadcaster connection
+	if streamHub.Broadcaster != nil {
+		close(streamHub.Broadcaster.Send)
+		streamHub.Broadcaster.Conn.Close()
+		streamHub.Broadcaster = nil
+	}
+
+	// Close all viewer connections
+	streamHub.mu.Lock()
+	for viewer := range streamHub.Viewers {
+		close(viewer.Send)
+		viewer.Conn.Close()
+		delete(streamHub.Viewers, viewer)
+	}
+	streamHub.mu.Unlock()
+
+	// Remove the stream hub
+	delete(h.Streams, streamID)
+	log.Printf("Stream %s closed successfully", streamID)
+}
+
 func logStreamJoin(client *Client) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
