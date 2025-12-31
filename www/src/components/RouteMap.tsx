@@ -85,9 +85,9 @@ export function RouteMap({ streamData }: RouteMapProps) {
   return (
     <MapContainer
       center={defaultCenter}
-      zoom={50}
+      zoom={1000}
       style={{ height: '100%', width: '100%', borderRadius: '12px' }}
-      zoomControl={true}
+      zoomControl={false}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
