@@ -1,8 +1,23 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import type { StreamData, WebSocketMessage, ConnectionStatus } from '../types/stream';
 
-const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8080';
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+// Use relative URLs to go through Vite proxy (or same origin in production)
+const getWebSocketUrl = () => {
+  if (import.meta.env.VITE_WS_URL) {
+    return import.meta.env.VITE_WS_URL;
+  }
+  // Use current host with appropriate WebSocket protocol
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  return `${protocol}//${window.location.host}`;
+};
+
+const getApiUrl = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // Use relative URL to go through proxy
+  return '';
+};
 
 interface UseWebSocketResult {
   streamData: StreamData | null;
@@ -26,7 +41,8 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
     if (!streamId) return false;
     
     try {
-      const response = await fetch(`${API_URL}/api/streams/${streamId}`);
+      const apiUrl = getApiUrl();
+      const response = await fetch(`${apiUrl}/api/streams/${streamId}`);
       
       if (response.status === 404) {
         setError('Stream not found');
@@ -81,7 +97,8 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
     }
 
     try {
-      const ws = new WebSocket(`${WS_URL}/ws/viewer/${streamId}`);
+      const wsUrl = getWebSocketUrl();
+      const ws = new WebSocket(`${wsUrl}/ws/viewer/${streamId}`);
       wsRef.current = ws;
 
       ws.onopen = () => {

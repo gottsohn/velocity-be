@@ -77,8 +77,11 @@ make run-frontend
 
 ### Access
 
-- **Frontend**: http://localhost:3000/?stream=YOUR_STREAM_ID
-- **Backend API**: http://localhost:8080
+- **App URL**: http://localhost:3000/?stream=YOUR_STREAM_ID
+- All requests go through port 3000:
+  - `/api/*` → proxied to backend (port 8080)
+  - `/ws/*` → proxied to backend (port 8080)
+  - `/*` → served by frontend
 
 ## API Endpoints
 
@@ -188,8 +191,10 @@ ENV=development
 ### Frontend (www/.env)
 
 ```env
-VITE_WS_URL=ws://localhost:8080
-VITE_API_URL=http://localhost:8080
+# Leave empty to use relative URLs (goes through Vite proxy)
+# Only set these for production or custom deployments
+VITE_WS_URL=
+VITE_API_URL=
 ```
 
 ## Project Structure
