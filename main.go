@@ -49,6 +49,9 @@ func main() {
 		api.POST("/streams", handlers.CreateStreamHandler)
 		api.GET("/streams/:streamId", handlers.GetStreamHandler)
 		api.DELETE("/streams/:streamId", handlers.DeleteStreamHandler(wsHub))
+
+		// Feature flags
+		api.GET("/feature-flags", handlers.GetFeatureFlagsHandler)
 	}
 
 	// WebSocket routes

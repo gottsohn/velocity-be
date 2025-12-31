@@ -231,3 +231,27 @@ func ViewerWebSocketHandler(h *hub.Hub) gin.HandlerFunc {
 		go client.ReadPump(h)
 	}
 }
+
+// GetFeatureFlagsHandler returns the feature flags from the database
+func GetFeatureFlagsHandler(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var featureFlags models.FeatureFlags
+	err := db.FeatureFlagsCollection().FindOne(ctx, bson.M{}).Decode(&featureFlags)
+	if err != nil {
+		// Return default values (all false) if no feature flags document exists
+		c.JSON(http.StatusOK, models.FeatureFlagsResponse{
+			EnableLiveStreams:   false,
+			EnableiCloudStorage: false,
+			EnableCarPlay:       false,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, models.FeatureFlagsResponse{
+		EnableLiveStreams:   featureFlags.EnableLiveStreams,
+		EnableiCloudStorage: featureFlags.EnableiCloudStorage,
+		EnableCarPlay:       featureFlags.EnableCarPlay,
+	})
+}

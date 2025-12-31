@@ -90,3 +90,18 @@ type StreamIDResponse struct {
 	StreamID string `json:"streamId"`
 	Message  string `json:"message"`
 }
+
+// FeatureFlags represents the feature flags configuration
+type FeatureFlags struct {
+	ID                  primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	EnableLiveStreams   bool               `json:"enableLiveStreams" bson:"enableLiveStreams"`
+	EnableiCloudStorage bool               `json:"enableiCloudStorage" bson:"enableiCloudStorage"`
+	EnableCarPlay       bool               `json:"enableCarPlay" bson:"enableCarPlay"`
+}
+
+// FeatureFlagsResponse represents the API response for feature flags
+type FeatureFlagsResponse struct {
+	EnableLiveStreams   bool `json:"enableLiveStreams"`
+	EnableiCloudStorage bool `json:"enableiCloudStorage"`
+	EnableCarPlay       bool `json:"enableCarPlay"`
+}

@@ -56,3 +56,7 @@ func StreamsCollection() *mongo.Collection {
 func StreamJoinLogsCollection() *mongo.Collection {
 	return Database.Collection("stream_join_logs")
 }
+
+func FeatureFlagsCollection() *mongo.Collection {
+	return Database.Collection("feature_flags")
+}
