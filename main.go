@@ -60,6 +60,18 @@ func main() {
 		ws.GET("/viewer/:streamId", handlers.ViewerWebSocketHandler(wsHub))
 	}
 
+	// Serve static frontend files in production
+	if config.AppConfig.Env == "production" {
+		// Serve static files from www/dist
+		router.Static("/assets", "./www/dist/assets")
+		router.StaticFile("/vite.svg", "./www/dist/vite.svg")
+		
+		// Serve index.html for all other routes (SPA fallback)
+		router.NoRoute(func(c *gin.Context) {
+			c.File("./www/dist/index.html")
+		})
+	}
+
 	// Graceful shutdown
 	go func() {
 		quit := make(chan os.Signal, 1)

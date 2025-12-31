@@ -1,4 +1,4 @@
-.PHONY: all run run-backend run-frontend install build clean help dev
+.PHONY: all run run-backend run-frontend install build clean help dev docker-build docker-up docker-down docker-logs
 
 # Default target
 all: install
@@ -74,11 +74,31 @@ dev:
 	(cd www && npm run dev) & \
 	wait
 
+# Docker commands
+docker-build:
+	@echo "🐳 Building Docker image..."
+	docker build -t velocity .
+
+docker-up:
+	@echo "🐳 Starting with Docker Compose..."
+	docker compose up -d --build
+	@echo "✅ Velocity is running at http://localhost:8080"
+
+docker-down:
+	@echo "🐳 Stopping Docker containers..."
+	docker compose down
+
+docker-logs:
+	@echo "📋 Docker logs..."
+	docker compose logs -f
+
 # Help
 help:
 	@echo "Velocity - Real-time Drive Streaming"
 	@echo ""
 	@echo "Available commands:"
+	@echo ""
+	@echo "Development:"
 	@echo "  make install      - Install all dependencies"
 	@echo "  make run          - Run backend and frontend (same as 'make dev')"
 	@echo "  make run-backend  - Run backend only (port 8080)"
@@ -86,9 +106,21 @@ help:
 	@echo "  make dev          - Run both in development mode"
 	@echo "  make build        - Build both backend and frontend"
 	@echo "  make clean        - Clean build artifacts"
+	@echo ""
+	@echo "Docker:"
+	@echo "  make docker-build - Build Docker image"
+	@echo "  make docker-up    - Start with Docker Compose"
+	@echo "  make docker-down  - Stop Docker containers"
+	@echo "  make docker-logs  - View Docker logs"
+	@echo ""
 	@echo "  make help         - Show this help message"
 	@echo ""
 	@echo "Development:"
 	@echo "  Access app at http://localhost:3000"
 	@echo "  Backend runs internally on port 8080"
 	@echo "  Frontend proxies /api/* and /ws/* to backend"
+	@echo ""
+	@echo "Docker (Production):"
+	@echo "  Access app at http://localhost:8080"
+	@echo "  Set MONGODB_URI environment variable before running docker-up"
+	@echo "  Example: MONGODB_URI='mongodb+srv://...' make docker-up"

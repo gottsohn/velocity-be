@@ -83,6 +83,59 @@ make run-frontend
   - `/ws/*` → proxied to backend (port 8080)
   - `/*` → served by frontend
 
+## Docker Deployment
+
+### Prerequisites
+- Docker and Docker Compose installed
+- MongoDB instance (local or remote like MongoDB Atlas)
+
+### Quick Start with Docker
+
+```bash
+# Build and run with docker-compose
+MONGODB_URI="mongodb+srv://user:pass@cluster.mongodb.net" make docker-up
+```
+
+Or run directly with Docker:
+
+```bash
+# Build the image
+docker build -t velocity .
+
+# Run the container
+docker run -d \
+  --name velocity \
+  -p 8080:8080 \
+  -e MONGODB_URI="mongodb+srv://user:pass@cluster.mongodb.net" \
+  -e MONGODB_DATABASE="velocity" \
+  -e CORS_ALLOWED_ORIGINS="https://yourdomain.com" \
+  velocity
+```
+
+### Docker Commands
+
+```bash
+# Build and start
+make docker-up
+
+# Stop the container
+make docker-down
+
+# View logs
+make docker-logs
+
+# Rebuild without cache
+make docker-build
+```
+
+### Access (Docker)
+
+- **App URL**: http://localhost:8080/?stream=YOUR_STREAM_ID
+- In production mode, the Go backend serves both the API and the static frontend:
+  - `/api/*` → API endpoints
+  - `/ws/*` → WebSocket endpoints
+  - `/*` → Static frontend files
+
 ## API Endpoints
 
 ### REST API
