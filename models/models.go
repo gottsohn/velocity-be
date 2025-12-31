@@ -43,6 +43,7 @@ type StreamData struct {
 	StartPostalCode    string          `json:"startPostalCode" bson:"startPostalCode"`
 	StartCity          string          `json:"startCity" bson:"startCity"`
 	EndAddressLine     string          `json:"endAddressLine" bson:"endAddressLine"`
+	EndPostalCode      string          `json:"endPostalCode" bson:"endPostalCode"`
 	EndCity            string          `json:"endCity" bson:"endCity"`
 	ExpectedDistanceKm *float64        `json:"expectedDistanceKm,omitempty" bson:"expectedDistanceKm,omitempty"`
 	Car                Car             `json:"car" bson:"car"`

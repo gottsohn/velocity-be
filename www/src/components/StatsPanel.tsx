@@ -1,5 +1,16 @@
+import { useRef } from 'react';
 import { Paper, Group, Stack, Text, Badge, ThemeIcon, useMantineTheme } from '@mantine/core';
 import type { StreamData } from '../types/stream';
+
+// Cached address data structure
+interface CachedAddressData {
+  startAddressLine: string;
+  startPostalCode: string;
+  startCity: string;
+  endAddressLine: string;
+  endPostalCode: string;
+  endCity: string;
+}
 
 interface StatsPanelProps {
   streamData: StreamData | null;
@@ -73,6 +84,36 @@ function StatCard({
 }
 
 export function StatsPanel({ streamData }: StatsPanelProps) {
+  // Cache address data - only update when new values are received
+  const cachedAddressData = useRef<CachedAddressData | null>(null);
+
+  // Update cache only when address properties are present
+  if (streamData) {
+    const hasStartAddress = streamData.startAddressLine || streamData.startPostalCode || streamData.startCity;
+    const hasEndAddress = streamData.endAddressLine || streamData.endPostalCode || streamData.endCity;
+    
+    if (hasStartAddress || hasEndAddress) {
+      cachedAddressData.current = {
+        startAddressLine: streamData.startAddressLine || cachedAddressData.current?.startAddressLine || '',
+        startPostalCode: streamData.startPostalCode || cachedAddressData.current?.startPostalCode || '',
+        startCity: streamData.startCity || cachedAddressData.current?.startCity || '',
+        endAddressLine: streamData.endAddressLine || cachedAddressData.current?.endAddressLine || '',
+        endPostalCode: streamData.endPostalCode || cachedAddressData.current?.endPostalCode || '',
+        endCity: streamData.endCity || cachedAddressData.current?.endCity || '',
+      };
+    }
+  }
+
+  // Use cached address data or fallback to empty strings
+  const addressData = cachedAddressData.current || {
+    startAddressLine: '',
+    startPostalCode: '',
+    startCity: '',
+    endAddressLine: '',
+    endPostalCode: '',
+    endCity: '',
+  };
+
   if (!streamData) {
     return (
       <Paper p="xl" radius="lg" withBorder>
@@ -87,6 +128,7 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
     ? Math.min(100, (streamData.distanceKm / streamData.expectedDistanceKm) * 100)
     : 0;
 
+    console.log(streamData);
   return (
     <Stack gap="md">
       {/* Car Info */}
@@ -190,10 +232,10 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
             <Stack gap={2}>
               <Text size="xs" c="dimmed" tt="uppercase">From</Text>
               <Text size="sm" fw={600}>
-                {streamData.startAddressLine}
+                {addressData.startAddressLine}
               </Text>
               <Text size="xs" c="dimmed">
-                {streamData.startPostalCode} {streamData.startCity}
+                {addressData.startPostalCode} {addressData.startCity}
               </Text>
             </Stack>
           </Group>
@@ -214,10 +256,10 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
             <Stack gap={2}>
               <Text size="xs" c="dimmed" tt="uppercase">To</Text>
               <Text size="sm" fw={600}>
-                {streamData.endAddressLine}
+                {addressData.endAddressLine}
               </Text>
               <Text size="xs" c="dimmed">
-                {streamData.endCity}
+                {addressData.endPostalCode} {addressData.endCity}
               </Text>
             </Stack>
           </Group>

@@ -110,11 +110,16 @@ make run-frontend
 {
   "type": "stream_data",
   "payload": {
-    "navigationData": {},
+    "navigationData": {
+      "polyline": [[51.5074, -0.1278], [51.5100, -0.1300], [51.7520, -1.2577]],
+      "distance": 100.5,
+      "expectedTravelTime": 3600
+    },
     "currentLocation": {
       "latitude": 51.5074,
       "longitude": -0.1278
     },
+    "currentSpeedKmh": 95.5,
     "duration": 1800,
     "distanceKm": 25.5,
     "maxSpeedKmh": 120,
@@ -127,6 +132,7 @@ make run-frontend
     "startPostalCode": "SW1A 1AA",
     "startCity": "London",
     "endAddressLine": "456 High St",
+    "endPostalCode": "OX1 2JD",
     "endCity": "Oxford",
     "expectedDistanceKm": 100,
     "car": {
@@ -141,7 +147,17 @@ make run-frontend
 
 | Field | Type | Description |
 |-------|------|-------------|
+| `navigationData` | object | Route navigation data (optional, cached when not sent) |
+| `navigationData.polyline` | array | Array of `[lat, long]` coordinates representing the expected route |
+| `navigationData.distance` | number | Total route distance in kilometers (e.g., `243.54`) |
+| `navigationData.expectedTravelTime` | number | Expected travel time in seconds |
+| `currentSpeedKmh` | number | Current speed in km/h (e.g., `95.5`) - displayed in real-time |
+| `currentLocation` | object | Current GPS position with `latitude` and `longitude` |
 | `isPaused` | boolean | When `true`, the frontend displays a "Stream Paused" overlay on the map |
+| `startAddressLine`, `startPostalCode`, `startCity` | string | Start location details (cached when not sent) |
+| `endAddressLine`, `endPostalCode`, `endCity` | string | Destination details (cached when not sent) |
+
+> **Note:** Fields marked as "cached when not sent" will retain their last received value on the frontend. This allows the mobile app to send only changed data in subsequent updates.
 
 ### Viewer Count Update (to Mobile App)
 

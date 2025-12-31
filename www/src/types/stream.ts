@@ -32,6 +32,7 @@ export interface StreamData {
   startPostalCode: string;
   startCity: string;
   endAddressLine: string;
+  endPostalCode: string;
   endCity: string;
   expectedDistanceKm?: number;
   car: Car;

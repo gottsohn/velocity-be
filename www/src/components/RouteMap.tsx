@@ -1,7 +1,7 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import type { StreamData } from '../types/stream';
+import type { NavigationData, StreamData } from '../types/stream';
 
 // Fix Leaflet default marker icon issue
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl?: unknown })._getIconUrl;
@@ -38,6 +38,14 @@ function MapUpdater({ center }: { center: [number, number] | null }) {
 }
 
 export function RouteMap({ streamData }: RouteMapProps) {
+  // Cache navigationData - only update when a new value is received
+  const cachedNavigationData = useRef<NavigationData | null>(null);
+  
+  // Update cache only when navigationData is present in the stream
+  if (streamData?.navigationData) {
+    cachedNavigationData.current = streamData.navigationData;
+  }
+
   const currentPosition = useMemo((): [number, number] | null => {
     if (!streamData?.currentLocation) return null;
     return [streamData.currentLocation.latitude, streamData.currentLocation.longitude];
@@ -53,16 +61,17 @@ export function RouteMap({ streamData }: RouteMapProps) {
     return [streamData.endLatitude, streamData.endLongitude];
   }, [streamData?.endLatitude, streamData?.endLongitude]);
 
-  // Use polyline from navigationData if available, otherwise fallback to straight line
+  // Use cached polyline from navigationData if available, otherwise fallback to straight line
   const routeLine = useMemo((): [number, number][] => {
-    // If navigationData has a polyline, use it
-    if (streamData?.navigationData?.polyline && streamData.navigationData.polyline.length > 0) {
-      return streamData.navigationData.polyline;
+    // Use cached navigationData polyline if available
+    const navData = cachedNavigationData.current;
+    if (navData?.polyline && navData.polyline.length > 0) {
+      return navData.polyline;
     }
     // Fallback to simple straight line between start and end
     if (!startPosition || !endPosition) return [];
     return [startPosition, endPosition];
-  }, [streamData?.navigationData?.polyline, startPosition, endPosition]);
+  }, [streamData?.navigationData, startPosition, endPosition]);
 
   // Calculate traveled path
   // const traveledPath = useMemo((): [number, number][] => {
