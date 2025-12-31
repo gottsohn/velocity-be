@@ -113,6 +113,33 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
         </Group>
       </Paper>
 
+      {/* Current Speed - Prominent Display */}
+      <Paper 
+        p="lg" 
+        radius="lg"
+        style={{
+          background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%)',
+          border: '1px solid rgba(59, 130, 246, 0.3)',
+        }}
+      >
+        <Group justify="space-between" align="center">
+          <Stack gap={2}>
+            <Text size="xs" c="dimmed" tt="uppercase" fw={500}>
+              Current Speed
+            </Text>
+            <Group gap={4} align="baseline">
+              <Text size="2.5rem" fw={700} c="blue" style={{ lineHeight: 1 }}>
+                {streamData.currentSpeedKmh.toFixed(1)}
+              </Text>
+              <Text size="lg" c="dimmed">
+                km/h
+              </Text>
+            </Group>
+          </Stack>
+          <Text size="3rem">🏎️💨</Text>
+        </Group>
+      </Paper>
+
       {/* Stats Grid */}
       <div style={{ 
         display: 'grid', 

@@ -53,17 +53,22 @@ export function RouteMap({ streamData }: RouteMapProps) {
     return [streamData.endLatitude, streamData.endLongitude];
   }, [streamData?.endLatitude, streamData?.endLongitude]);
 
-  // Calculate route line (simple straight line for now, could use routing API for actual route)
+  // Use polyline from navigationData if available, otherwise fallback to straight line
   const routeLine = useMemo((): [number, number][] => {
+    // If navigationData has a polyline, use it
+    if (streamData?.navigationData?.polyline && streamData.navigationData.polyline.length > 0) {
+      return streamData.navigationData.polyline;
+    }
+    // Fallback to simple straight line between start and end
     if (!startPosition || !endPosition) return [];
     return [startPosition, endPosition];
-  }, [startPosition, endPosition]);
+  }, [streamData?.navigationData?.polyline, startPosition, endPosition]);
 
   // Calculate traveled path
-  const traveledPath = useMemo((): [number, number][] => {
-    if (!startPosition || !currentPosition) return [];
-    return [startPosition, currentPosition];
-  }, [startPosition, currentPosition]);
+  // const traveledPath = useMemo((): [number, number][] => {
+  //   if (!startPosition || !currentPosition) return [];
+  //   return [startPosition, currentPosition];
+  // }, [startPosition, currentPosition]);
 
   // Default center (will update when data comes in)
   const defaultCenter: [number, number] = currentPosition || startPosition || [51.505, -0.09];
@@ -82,31 +87,30 @@ export function RouteMap({ streamData }: RouteMapProps) {
       
       <MapUpdater center={currentPosition} />
       
-      {/* Route line (remaining path) */}
+      {/* Route line (expected path) */}
       {routeLine.length > 0 && (
         <Polyline
           positions={routeLine}
-          color="#6b7280"
-          weight={4}
-          opacity={0.5}
-          dashArray="10, 10"
+          color="#3b82f6"
+          weight={6}
+          opacity={1}
         />
       )}
       
       {/* Traveled path */}
-      {traveledPath.length > 0 && (
+      {/* {traveledPath.length > 0 && (
         <Polyline
           positions={traveledPath}
           color="#ff8c00"
           weight={5}
           opacity={0.9}
         />
-      )}
+      )} */}
       
       {/* Start marker */}
-      {startPosition && (
+      {/* {startPosition && (
         <Marker position={startPosition} icon={startIcon} />
-      )}
+      )} */}
       
       {/* End marker */}
       {endPosition && (

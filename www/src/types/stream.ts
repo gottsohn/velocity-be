@@ -9,9 +9,17 @@ export interface CurrentLocation {
   longitude: number;
 }
 
+// NavigationData represents the expected route information
+export interface NavigationData {
+  polyline: [number, number][]; // Array of [lat, long] coordinates e.g. [[12.34, 14.656], [12.44, 15.666]]
+  distance: number; // Distance in km e.g. 243.54
+  expectedTravelTime: number; // Expected travel time in seconds
+}
+
 export interface StreamData {
-  navigationData?: unknown;
+  navigationData?: NavigationData;
   currentLocation: CurrentLocation;
+  currentSpeedKmh: number; // Current speed in km/h e.g. 190.3
   duration: number;
   distanceKm: number;
   maxSpeedKmh: number;

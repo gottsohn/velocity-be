@@ -19,10 +19,18 @@ type CurrentLocation struct {
 	Longitude float64 `json:"longitude" bson:"longitude"`
 }
 
+// NavigationData represents the expected route information
+type NavigationData struct {
+	Polyline           [][]float64 `json:"polyline" bson:"polyline"`                     // Array of [lat, long] coordinates e.g. [[12.34, 14.656], [12.44, 15.666]]
+	Distance           float64     `json:"distance" bson:"distance"`                     // Distance in km e.g. 243.54
+	ExpectedTravelTime float64     `json:"expectedTravelTime" bson:"expectedTravelTime"` // Expected travel time in seconds
+}
+
 // StreamData represents the data sent from the mobile app
 type StreamData struct {
-	NavigationData     interface{}     `json:"navigationData,omitempty" bson:"navigationData,omitempty"`
+	NavigationData     *NavigationData `json:"navigationData,omitempty" bson:"navigationData,omitempty"`
 	CurrentLocation    CurrentLocation `json:"currentLocation" bson:"currentLocation"`
+	CurrentSpeedKmh    float64         `json:"currentSpeedKmh" bson:"currentSpeedKmh"` // Current speed in km/h e.g. 190.3
 	Duration           float64         `json:"duration" bson:"duration"`
 	DistanceKm         float64         `json:"distanceKm" bson:"distanceKm"`
 	MaxSpeedKmh        float64         `json:"maxSpeedKmh" bson:"maxSpeedKmh"`
