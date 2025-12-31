@@ -82,6 +82,7 @@ type WebSocketMessage struct {
 type ViewerCountUpdate struct {
 	StreamID    string `json:"streamId"`
 	ViewerCount int    `json:"viewerCount"`
+	NewUser     bool   `json:"newUser"` // true when a new user just joined, false otherwise
 }
 
 // StreamIDResponse represents the response when creating a new stream

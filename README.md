@@ -166,10 +166,17 @@ make run-frontend
   "type": "viewer_count",
   "payload": {
     "streamId": "e7f3a9b1c5d2e8f4a0b6c1d7e2f8a3b9c4d0e5f1a6b2c8d3e9f4a1b7c2d8e3f9",
-    "viewerCount": 5
+    "viewerCount": 5,
+    "newUser": true
   }
 }
 ```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `streamId` | string | The stream ID |
+| `viewerCount` | number | Current number of viewers |
+| `newUser` | boolean | `true` when a new user just joined, `false` when a user left |
 
 ### Delete Stream Response
 

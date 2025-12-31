@@ -96,8 +96,8 @@ func (h *Hub) registerClient(client *Client) {
 		// Log the join in the database
 		go logStreamJoin(client)
 
-		// Notify broadcaster about viewer count
-		h.notifyBroadcasterViewerCount(streamHub, viewerCount)
+		// Notify broadcaster about viewer count (newUser: true because a user just joined)
+		h.notifyBroadcasterViewerCount(streamHub, viewerCount, true)
 		
 		log.Printf("Viewer joined stream %s (total viewers: %d)", client.StreamID, viewerCount)
 	}
@@ -135,8 +135,8 @@ func (h *Hub) unregisterClient(client *Client) {
 		// Log the leave in the database
 		go logStreamLeave(client)
 
-		// Notify broadcaster about viewer count
-		h.notifyBroadcasterViewerCount(streamHub, viewerCount)
+		// Notify broadcaster about viewer count (newUser: false because a user left)
+		h.notifyBroadcasterViewerCount(streamHub, viewerCount, false)
 		
 		log.Printf("Viewer left stream %s (total viewers: %d)", client.StreamID, viewerCount)
 	}
@@ -152,7 +152,7 @@ func (h *Hub) unregisterClient(client *Client) {
 	}
 }
 
-func (h *Hub) notifyBroadcasterViewerCount(streamHub *StreamHub, count int) {
+func (h *Hub) notifyBroadcasterViewerCount(streamHub *StreamHub, count int, newUser bool) {
 	if streamHub.Broadcaster == nil {
 		return
 	}
@@ -162,6 +162,7 @@ func (h *Hub) notifyBroadcasterViewerCount(streamHub *StreamHub, count int) {
 		Payload: models.ViewerCountUpdate{
 			StreamID:    streamHub.StreamID,
 			ViewerCount: count,
+			NewUser:     newUser,
 		},
 	}
 
