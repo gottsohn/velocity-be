@@ -32,9 +32,12 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
   const [status, setStatus] = useState<ConnectionStatus>('disconnected');
   const [error, setError] = useState<string | null>(null);
   const [isStreamClosed, setIsStreamClosed] = useState(false);
+  
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const reconnectAttempts = useRef(0);
+  const isConnectingRef = useRef(false);
+  const isMountedRef = useRef(true);
 
   // Check if stream exists and is not deleted before connecting
   const checkStreamStatus = useCallback(async (): Promise<boolean> => {
@@ -43,6 +46,8 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
     try {
       const apiUrl = getApiUrl();
       const response = await fetch(`${apiUrl}/api/streams/${streamId}`);
+      
+      if (!isMountedRef.current) return false;
       
       if (response.status === 404) {
         setError('Stream not found');
@@ -79,20 +84,25 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
       return;
     }
 
-    if (isStreamClosed) {
-      return; // Don't reconnect if stream is closed
-    }
-
-    if (wsRef.current?.readyState === WebSocket.OPEN) {
+    // Prevent multiple simultaneous connection attempts
+    if (isConnectingRef.current) {
       return;
     }
 
+    // Don't connect if already connected
+    if (wsRef.current?.readyState === WebSocket.OPEN || 
+        wsRef.current?.readyState === WebSocket.CONNECTING) {
+      return;
+    }
+
+    isConnectingRef.current = true;
     setStatus('connecting');
     setError(null);
 
     // Check stream status before connecting
     const canConnect = await checkStreamStatus();
-    if (!canConnect) {
+    if (!canConnect || !isMountedRef.current) {
+      isConnectingRef.current = false;
       return;
     }
 
@@ -102,6 +112,11 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
       wsRef.current = ws;
 
       ws.onopen = () => {
+        if (!isMountedRef.current) {
+          ws.close();
+          return;
+        }
+        isConnectingRef.current = false;
         setStatus('connected');
         setError(null);
         setIsStreamClosed(false);
@@ -110,6 +125,8 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
       };
 
       ws.onmessage = (event) => {
+        if (!isMountedRef.current) return;
+        
         try {
           const message: WebSocketMessage = JSON.parse(event.data);
           
@@ -119,7 +136,6 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
             const payload = message.payload as { message: string };
             setError(payload.message);
           } else if (message.type === 'stream_closed') {
-            // Stream was closed while connected
             setIsStreamClosed(true);
             setStatus('closed');
             setError('This stream has been closed by the broadcaster');
@@ -131,65 +147,84 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
       };
 
       ws.onerror = () => {
+        if (!isMountedRef.current) return;
+        isConnectingRef.current = false;
         setError('WebSocket connection error');
         setStatus('error');
       };
 
-      ws.onclose = async (event) => {
+      ws.onclose = async () => {
+        isConnectingRef.current = false;
         wsRef.current = null;
 
-        // Check if stream was closed (code 1000 with specific reason or server-initiated close)
-        if (event.code === 1000 || event.code === 1001) {
-          // Check if stream is now deleted
-          const streamStillValid = await checkStreamStatus();
-          if (!streamStillValid) {
-            return; // Stream is closed, don't reconnect
-          }
+        if (!isMountedRef.current) return;
+
+        // Check if stream is now deleted
+        const streamStillValid = await checkStreamStatus();
+        if (!streamStillValid || !isMountedRef.current) {
+          return;
         }
 
-        if (!isStreamClosed) {
-          setStatus('disconnected');
-          
-          // Auto-reconnect with exponential backoff
-          if (reconnectAttempts.current < 5) {
-            const delay = Math.min(1000 * Math.pow(2, reconnectAttempts.current), 30000);
-            reconnectTimeoutRef.current = setTimeout(() => {
+        setStatus('disconnected');
+        
+        // Auto-reconnect with exponential backoff
+        if (reconnectAttempts.current < 5) {
+          const delay = Math.min(1000 * Math.pow(2, reconnectAttempts.current), 30000);
+          reconnectTimeoutRef.current = setTimeout(() => {
+            if (isMountedRef.current) {
               reconnectAttempts.current++;
               connect();
-            }, delay);
-          }
+            }
+          }, delay);
         }
       };
     } catch (e) {
+      isConnectingRef.current = false;
       setError('Failed to create WebSocket connection');
       setStatus('error');
     }
-  }, [streamId, isStreamClosed, checkStreamStatus]);
+  }, [streamId, checkStreamStatus]);
 
   const reconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {
       clearTimeout(reconnectTimeoutRef.current);
+      reconnectTimeoutRef.current = null;
     }
     if (wsRef.current) {
       wsRef.current.close();
+      wsRef.current = null;
     }
+    isConnectingRef.current = false;
     setIsStreamClosed(false);
     reconnectAttempts.current = 0;
     connect();
   }, [connect]);
 
   useEffect(() => {
-    connect();
+    isMountedRef.current = true;
+    
+    // Small delay to handle StrictMode double-mount
+    const connectTimeout = setTimeout(() => {
+      if (isMountedRef.current && streamId) {
+        connect();
+      }
+    }, 100);
 
     return () => {
+      isMountedRef.current = false;
+      clearTimeout(connectTimeout);
+      
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
+        reconnectTimeoutRef.current = null;
       }
       if (wsRef.current) {
         wsRef.current.close();
+        wsRef.current = null;
       }
+      isConnectingRef.current = false;
     };
-  }, [connect]);
+  }, [streamId, connect]);
 
   return { streamData, status, error, reconnect, isStreamClosed };
 }
