@@ -86,9 +86,11 @@ make run-frontend
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/streams` | Create a new stream ID |
+| POST | `/api/streams` | Create a new stream ID (64-char secure token) |
 | GET | `/api/streams/:streamId` | Get stream info |
 | DELETE | `/api/streams/:streamId` | Soft delete stream and close all connections |
+
+> **Note:** Stream IDs are 64-character cryptographically secure tokens generated using `crypto/rand`.
 
 ### WebSocket Endpoints
 
@@ -144,7 +146,7 @@ make run-frontend
 {
   "type": "viewer_count",
   "payload": {
-    "streamId": "abc12345",
+    "streamId": "e7f3a9b1c5d2e8f4a0b6c1d7e2f8a3b9c4d0e5f1a6b2c8d3e9f4a1b7c2d8e3f9",
     "viewerCount": 5
   }
 }
@@ -156,7 +158,7 @@ make run-frontend
 // Success (200 OK)
 {
   "message": "Stream deleted successfully",
-  "streamId": "abc12345",
+  "streamId": "e7f3a9b1c5d2e8f4a0b6c1d7e2f8a3b9c4d0e5f1a6b2c8d3e9f4a1b7c2d8e3f9",
   "deletedAt": "2025-12-30T10:30:00Z"
 }
 

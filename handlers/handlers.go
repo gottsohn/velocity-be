@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"context"
+	"crypto/rand"
+	"encoding/hex"
 	"log"
 	"net/http"
 	"time"
@@ -16,6 +18,15 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+// generateSecureStreamID generates a cryptographically secure 64-character stream ID
+func generateSecureStreamID() (string, error) {
+	bytes := make([]byte, 32) // 32 bytes = 64 hex characters
+	if _, err := rand.Read(bytes); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(bytes), nil
+}
+
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
@@ -26,7 +37,11 @@ var upgrader = websocket.Upgrader{
 
 // CreateStreamHandler generates a unique stream ID for mobile app
 func CreateStreamHandler(c *gin.Context) {
-	streamID := uuid.New().String()[:8] // Short 8-char ID for easy sharing
+	streamID, err := generateSecureStreamID()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate stream ID"})
+		return
+	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -39,7 +54,7 @@ func CreateStreamHandler(c *gin.Context) {
 		ViewerCount: 0,
 	}
 
-	_, err := db.StreamsCollection().InsertOne(ctx, stream)
+	_, err = db.StreamsCollection().InsertOne(ctx, stream)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create stream"})
 		return
