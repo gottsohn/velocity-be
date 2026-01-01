@@ -38,7 +38,7 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
   const reconnectAttempts = useRef(0);
   const isConnectingRef = useRef(false);
   const isMountedRef = useRef(true);
-  const connectRef = useRef<() => void>();
+  const connectRef = useRef<() => void>(() => {});
 
   // Check if stream exists and is not deleted before connecting
   const checkStreamStatus = useCallback(async (): Promise<boolean> => {
