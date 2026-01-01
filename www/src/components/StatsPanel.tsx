@@ -10,6 +10,10 @@ interface CachedAddressData {
   endAddressLine: string;
   endPostalCode: string;
   endCity: string;
+  destinationAddressLine: string;
+  destinationPostalCode: string;
+  destinationCity: string;
+  destinationName: string;
 }
 
 interface StatsPanelProps {
@@ -91,8 +95,9 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
   if (streamData) {
     const hasStartAddress = streamData.startAddressLine || streamData.startPostalCode || streamData.startCity;
     const hasEndAddress = streamData.endAddressLine || streamData.endPostalCode || streamData.endCity;
+    const hasDestinationAddress = streamData.destinationAddressLine || streamData.destinationPostalCode || streamData.destinationCity || streamData.destinationName;
     
-    if (hasStartAddress || hasEndAddress) {
+    if (hasStartAddress || hasEndAddress || hasDestinationAddress) {
       cachedAddressData.current = {
         startAddressLine: streamData.startAddressLine || cachedAddressData.current?.startAddressLine || '',
         startPostalCode: streamData.startPostalCode || cachedAddressData.current?.startPostalCode || '',
@@ -100,6 +105,10 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
         endAddressLine: streamData.endAddressLine || cachedAddressData.current?.endAddressLine || '',
         endPostalCode: streamData.endPostalCode || cachedAddressData.current?.endPostalCode || '',
         endCity: streamData.endCity || cachedAddressData.current?.endCity || '',
+        destinationAddressLine: streamData.destinationAddressLine || cachedAddressData.current?.destinationAddressLine || '',
+        destinationPostalCode: streamData.destinationPostalCode || cachedAddressData.current?.destinationPostalCode || '',
+        destinationCity: streamData.destinationCity || cachedAddressData.current?.destinationCity || '',
+        destinationName: streamData.destinationName || cachedAddressData.current?.destinationName || '',
       };
     }
   }
@@ -112,6 +121,10 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
     endAddressLine: '',
     endPostalCode: '',
     endCity: '',
+    destinationAddressLine: '',
+    destinationPostalCode: '',
+    destinationCity: '',
+    destinationName: '',
   };
 
   if (!streamData) {
@@ -256,10 +269,10 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
             <Stack gap={2}>
               <Text size="xs" c="dimmed" tt="uppercase">To</Text>
               <Text size="sm" fw={600}>
-                {addressData.endAddressLine}
+                {addressData.destinationName}
               </Text>
               <Text size="xs" c="dimmed">
-                {addressData.endPostalCode} {addressData.endCity}
+                {addressData.destinationPostalCode} {addressData.destinationCity}
               </Text>
             </Stack>
           </Group>

@@ -42,10 +42,16 @@ type StreamData struct {
 	StartAddressLine   string          `json:"startAddressLine" bson:"startAddressLine"`
 	StartPostalCode    string          `json:"startPostalCode" bson:"startPostalCode"`
 	StartCity          string          `json:"startCity" bson:"startCity"`
-	EndAddressLine     string          `json:"endAddressLine" bson:"endAddressLine"`
-	EndPostalCode      string          `json:"endPostalCode" bson:"endPostalCode"`
-	EndCity            string          `json:"endCity" bson:"endCity"`
-	ExpectedDistanceKm *float64        `json:"expectedDistanceKm,omitempty" bson:"expectedDistanceKm,omitempty"`
+	EndAddressLine          string          `json:"endAddressLine" bson:"endAddressLine"`
+	EndPostalCode           string          `json:"endPostalCode" bson:"endPostalCode"`
+	EndCity                 string          `json:"endCity" bson:"endCity"`
+	DestinationLatitude     float64         `json:"destinationLatitude" bson:"destinationLatitude"`
+	DestinationLongitude    float64         `json:"destinationLongitude" bson:"destinationLongitude"`
+	DestinationAddressLine  string          `json:"destinationAddressLine" bson:"destinationAddressLine"`
+	DestinationPostalCode   string          `json:"destinationPostalCode" bson:"destinationPostalCode"`
+	DestinationCity         string          `json:"destinationCity" bson:"destinationCity"`
+	DestinationName         string          `json:"destinationName" bson:"destinationName"`
+	ExpectedDistanceKm      *float64        `json:"expectedDistanceKm,omitempty" bson:"expectedDistanceKm,omitempty"`
 	Car                Car             `json:"car" bson:"car"`
 	IsPaused           bool            `json:"isPaused" bson:"isPaused"`
 }
