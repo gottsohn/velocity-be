@@ -1,20 +1,6 @@
-import { useRef } from 'react';
+import { useMemo } from 'react';
 import { Paper, Group, Stack, Text, Badge, ThemeIcon, useMantineTheme } from '@mantine/core';
 import type { StreamData } from '../types/stream';
-
-// Cached address data structure
-interface CachedAddressData {
-  startAddressLine: string;
-  startPostalCode: string;
-  startCity: string;
-  endAddressLine: string;
-  endPostalCode: string;
-  endCity: string;
-  destinationAddressLine: string;
-  destinationPostalCode: string;
-  destinationCity: string;
-  destinationName: string;
-}
 
 interface StatsPanelProps {
   streamData: StreamData | null;
@@ -88,44 +74,19 @@ function StatCard({
 }
 
 export function StatsPanel({ streamData }: StatsPanelProps) {
-  // Cache address data - only update when new values are received
-  const cachedAddressData = useRef<CachedAddressData | null>(null);
-
-  // Update cache only when address properties are present
-  if (streamData) {
-    const hasStartAddress = streamData.startAddressLine || streamData.startPostalCode || streamData.startCity;
-    const hasEndAddress = streamData.endAddressLine || streamData.endPostalCode || streamData.endCity;
-    const hasDestinationAddress = streamData.destinationAddressLine || streamData.destinationPostalCode || streamData.destinationCity || streamData.destinationName;
-    
-    if (hasStartAddress || hasEndAddress || hasDestinationAddress) {
-      cachedAddressData.current = {
-        startAddressLine: streamData.startAddressLine || cachedAddressData.current?.startAddressLine || '',
-        startPostalCode: streamData.startPostalCode || cachedAddressData.current?.startPostalCode || '',
-        startCity: streamData.startCity || cachedAddressData.current?.startCity || '',
-        endAddressLine: streamData.endAddressLine || cachedAddressData.current?.endAddressLine || '',
-        endPostalCode: streamData.endPostalCode || cachedAddressData.current?.endPostalCode || '',
-        endCity: streamData.endCity || cachedAddressData.current?.endCity || '',
-        destinationAddressLine: streamData.destinationAddressLine || cachedAddressData.current?.destinationAddressLine || '',
-        destinationPostalCode: streamData.destinationPostalCode || cachedAddressData.current?.destinationPostalCode || '',
-        destinationCity: streamData.destinationCity || cachedAddressData.current?.destinationCity || '',
-        destinationName: streamData.destinationName || cachedAddressData.current?.destinationName || '',
-      };
-    }
-  }
-
-  // Use cached address data or fallback to empty strings
-  const addressData = cachedAddressData.current || {
-    startAddressLine: '',
-    startPostalCode: '',
-    startCity: '',
-    endAddressLine: '',
-    endPostalCode: '',
-    endCity: '',
-    destinationAddressLine: '',
-    destinationPostalCode: '',
-    destinationCity: '',
-    destinationName: '',
-  };
+  // Compute address data directly from streamData
+  const addressData = useMemo(() => ({
+    startAddressLine: streamData?.startAddressLine || '',
+    startPostalCode: streamData?.startPostalCode || '',
+    startCity: streamData?.startCity || '',
+    endAddressLine: streamData?.endAddressLine || '',
+    endPostalCode: streamData?.endPostalCode || '',
+    endCity: streamData?.endCity || '',
+    destinationAddressLine: streamData?.destinationAddressLine || '',
+    destinationPostalCode: streamData?.destinationPostalCode || '',
+    destinationCity: streamData?.destinationCity || '',
+    destinationName: streamData?.destinationName || '',
+  }), [streamData]);
 
   if (!streamData) {
     return (

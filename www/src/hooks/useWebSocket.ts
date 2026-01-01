@@ -38,6 +38,7 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
   const reconnectAttempts = useRef(0);
   const isConnectingRef = useRef(false);
   const isMountedRef = useRef(true);
+  const connectRef = useRef<() => void>();
 
   // Check if stream exists and is not deleted before connecting
   const checkStreamStatus = useCallback(async (): Promise<boolean> => {
@@ -173,17 +174,22 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
           reconnectTimeoutRef.current = setTimeout(() => {
             if (isMountedRef.current) {
               reconnectAttempts.current++;
-              connect();
+              connectRef.current?.();
             }
           }, delay);
         }
       };
-    } catch (e) {
+    } catch {
       isConnectingRef.current = false;
       setError('Failed to create WebSocket connection');
       setStatus('error');
     }
   }, [streamId, checkStreamStatus]);
+
+  // Keep ref in sync with latest connect function
+  useEffect(() => {
+    connectRef.current = connect;
+  }, [connect]);
 
   const reconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {

@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import type { NavigationData, StreamData } from '../types/stream';
+import type { StreamData } from '../types/stream';
 
 // Fix Leaflet default marker icon issue
 delete (L.Icon.Default.prototype as unknown as { _getIconUrl?: unknown })._getIconUrl;
@@ -38,33 +38,24 @@ function MapUpdater({ center }: { center: [number, number] | null }) {
 }
 
 export function RouteMap({ streamData }: RouteMapProps) {
-  // Cache navigationData - only update when a new value is received
-  const cachedNavigationData = useRef<NavigationData | null>(null);
-  
-  // Update cache only when navigationData is present in the stream
-  if (streamData?.navigationData) {
-    cachedNavigationData.current = streamData.navigationData;
-  }
-
   const currentPosition = useMemo((): [number, number] | null => {
     if (!streamData?.currentLocation) return null;
     return [streamData.currentLocation.latitude, streamData.currentLocation.longitude];
-  }, [streamData?.currentLocation]);
+  }, [streamData]);
 
   const startPosition = useMemo((): [number, number] | null => {
     if (!streamData) return null;
     return [streamData.startLatitude, streamData.startLongitude];
-  }, [streamData?.startLatitude, streamData?.startLongitude]);
+  }, [streamData]);
 
   const endPosition = useMemo((): [number, number] | null => {
     if (!streamData) return null;
     return [streamData.endLatitude, streamData.endLongitude];
-  }, [streamData?.endLatitude, streamData?.endLongitude]);
+  }, [streamData]);
 
-  // Use cached polyline from navigationData if available, otherwise fallback to straight line
+  // Use navigationData polyline if available, otherwise fallback to straight line
   const routeLine = useMemo((): [number, number][] => {
-    // Use cached navigationData polyline if available
-    const navData = cachedNavigationData.current;
+    const navData = streamData?.navigationData;
     if (navData?.polyline && navData.polyline.length > 0) {
       return navData.polyline;
     }
