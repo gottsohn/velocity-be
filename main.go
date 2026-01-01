@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 	"os/signal"
@@ -30,6 +31,11 @@ func main() {
 	// Create WebSocket hub
 	wsHub := hub.NewHub()
 	go wsHub.Run()
+
+	// Start inactive stream cleanup job
+	cleanupCtx, cleanupCancel := context.WithCancel(context.Background())
+	defer cleanupCancel()
+	go wsHub.StartInactiveStreamCleanup(cleanupCtx)
 
 	// Setup router
 	router := gin.Default()
@@ -81,6 +87,7 @@ func main() {
 		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 		<-quit
 		log.Println("Shutting down server...")
+		cleanupCancel() // Stop the inactive stream cleanup job
 		db.Disconnect()
 		os.Exit(0)
 	}()

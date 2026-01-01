@@ -149,6 +149,9 @@ func (h *Hub) unregisterClient(client *Client) {
 	if isEmpty {
 		delete(h.Streams, client.StreamID)
 		log.Printf("Stream hub %s removed (no clients)", client.StreamID)
+		
+		// Update LastConnectionAt in database when all clients disconnect
+		go updateLastConnectionTime(client.StreamID)
 	}
 }
 
@@ -283,4 +286,142 @@ func logStreamLeave(client *Client) {
 	if err != nil {
 		log.Printf("Error logging stream leave: %v", err)
 	}
+}
+
+func updateLastConnectionTime(streamID string) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	now := time.Now()
+	_, err := db.StreamsCollection().UpdateOne(
+		ctx,
+		bson.M{"streamId": streamID},
+		bson.M{"$set": bson.M{"lastConnectionAt": now}},
+	)
+	if err != nil {
+		log.Printf("Error updating last connection time for stream %s: %v", streamID, err)
+	}
+}
+
+// InactiveStreamCleanupInterval is how often the cleanup job runs
+const InactiveStreamCleanupInterval = 15 * time.Minute
+
+// InactiveStreamTimeout is how long a stream can be without connections before auto-cancellation
+const InactiveStreamTimeout = 6 * time.Hour
+
+// StartInactiveStreamCleanup starts a background goroutine that periodically
+// checks for and cancels streams that have had no connections for 6 hours
+func (h *Hub) StartInactiveStreamCleanup(ctx context.Context) {
+	ticker := time.NewTicker(InactiveStreamCleanupInterval)
+	defer ticker.Stop()
+
+	log.Printf("Starting inactive stream cleanup job (interval: %v, timeout: %v)", InactiveStreamCleanupInterval, InactiveStreamTimeout)
+
+	for {
+		select {
+		case <-ctx.Done():
+			log.Println("Stopping inactive stream cleanup job")
+			return
+		case <-ticker.C:
+			h.cleanupInactiveStreams()
+		}
+	}
+}
+
+func (h *Hub) cleanupInactiveStreams() {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	cutoffTime := time.Now().Add(-InactiveStreamTimeout)
+
+	// Find streams that:
+	// 1. Are still active (isActive: true)
+	// 2. Haven't been manually deleted (deletedAt: null)
+	// 3. Have lastConnectionAt older than 6 hours OR lastConnectionAt is null and createdAt is older than 6 hours
+	filter := bson.M{
+		"isActive":  true,
+		"deletedAt": nil,
+		"$or": []bson.M{
+			{"lastConnectionAt": bson.M{"$lt": cutoffTime}},
+			{
+				"lastConnectionAt": nil,
+				"createdAt":        bson.M{"$lt": cutoffTime},
+			},
+		},
+	}
+
+	cursor, err := db.StreamsCollection().Find(ctx, filter)
+	if err != nil {
+		log.Printf("Error finding inactive streams: %v", err)
+		return
+	}
+	defer cursor.Close(ctx)
+
+	var streamsToCancel []models.Stream
+	if err := cursor.All(ctx, &streamsToCancel); err != nil {
+		log.Printf("Error decoding inactive streams: %v", err)
+		return
+	}
+
+	for _, stream := range streamsToCancel {
+		// Double-check that there are no active connections in the hub
+		if h.HasActiveConnections(stream.StreamID) {
+			// Stream has active connections, update lastConnectionAt and skip
+			go updateLastConnectionTime(stream.StreamID)
+			continue
+		}
+
+		// Auto-cancel the stream
+		if err := h.autoCancelStream(ctx, stream.StreamID); err != nil {
+			log.Printf("Error auto-cancelling stream %s: %v", stream.StreamID, err)
+			continue
+		}
+
+		log.Printf("Auto-cancelled inactive stream: %s (no connections for 6+ hours)", stream.StreamID)
+	}
+
+	if len(streamsToCancel) > 0 {
+		log.Printf("Inactive stream cleanup completed: checked %d streams", len(streamsToCancel))
+	}
+}
+
+// HasActiveConnections checks if a stream has any active connections (broadcaster or viewers)
+func (h *Hub) HasActiveConnections(streamID string) bool {
+	h.mu.RLock()
+	defer h.mu.RUnlock()
+
+	streamHub, exists := h.Streams[streamID]
+	if !exists {
+		return false
+	}
+
+	streamHub.mu.RLock()
+	defer streamHub.mu.RUnlock()
+
+	return streamHub.Broadcaster != nil || len(streamHub.Viewers) > 0
+}
+
+func (h *Hub) autoCancelStream(ctx context.Context, streamID string) error {
+	now := time.Now()
+
+	_, err := db.StreamsCollection().UpdateOne(
+		ctx,
+		bson.M{"streamId": streamID},
+		bson.M{
+			"$set": bson.M{
+				"isActive":      false,
+				"autoCancelled": true,
+				"deletedAt":     now,
+				"updatedAt":     now,
+			},
+		},
+	)
+	if err != nil {
+		return err
+	}
+
+	// Close any remaining connections (shouldn't be any, but just in case)
+	h.CloseStream(streamID)
+
+	return nil
 }

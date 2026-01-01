@@ -58,14 +58,16 @@ type StreamData struct {
 
 // Stream represents an active streaming session
 type Stream struct {
-	ID          primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	StreamID    string             `json:"streamId" bson:"streamId"`
-	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
-	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
-	DeletedAt   *time.Time         `json:"deletedAt,omitempty" bson:"deletedAt,omitempty"`
-	IsActive    bool               `json:"isActive" bson:"isActive"`
-	LatestData  *StreamData        `json:"latestData,omitempty" bson:"latestData,omitempty"`
-	ViewerCount int                `json:"viewerCount" bson:"viewerCount"`
+	ID               primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	StreamID         string             `json:"streamId" bson:"streamId"`
+	CreatedAt        time.Time          `json:"createdAt" bson:"createdAt"`
+	UpdatedAt        time.Time          `json:"updatedAt" bson:"updatedAt"`
+	DeletedAt        *time.Time         `json:"deletedAt,omitempty" bson:"deletedAt,omitempty"`
+	IsActive         bool               `json:"isActive" bson:"isActive"`
+	LatestData       *StreamData        `json:"latestData,omitempty" bson:"latestData,omitempty"`
+	ViewerCount      int                `json:"viewerCount" bson:"viewerCount"`
+	LastConnectionAt *time.Time         `json:"lastConnectionAt,omitempty" bson:"lastConnectionAt,omitempty"` // Tracks when the last client was connected
+	AutoCancelled    bool               `json:"autoCancelled" bson:"autoCancelled"`                           // True if stream was auto-cancelled due to inactivity
 }
 
 // StreamJoinLog represents a log entry when someone joins a stream

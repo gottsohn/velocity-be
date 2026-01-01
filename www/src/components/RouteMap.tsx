@@ -19,7 +19,7 @@ const createPulseIcon = (color: string) => L.divIcon({
 });
 
 const currentLocationIcon = createPulseIcon('#ff8c00');
-const startIcon = createPulseIcon('#22c55e');
+// const startIcon = createPulseIcon('#22c55e');
 const endIcon = createPulseIcon('#ef4444');
 
 // Component to handle map updates
