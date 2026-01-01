@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 	"os/signal"
@@ -30,6 +31,11 @@ func main() {
 	// Create WebSocket hub
 	wsHub := hub.NewHub()
 	go wsHub.Run()
+
+	// Start inactive stream cleanup job
+	cleanupCtx, cleanupCancel := context.WithCancel(context.Background())
+	defer cleanupCancel()
+	go wsHub.StartInactiveStreamCleanup(cleanupCtx)
 
 	// Setup router
 	router := gin.Default()
@@ -68,7 +74,7 @@ func main() {
 		// Serve static files from www/dist
 		router.Static("/assets", "./www/dist/assets")
 		router.StaticFile("/vite.svg", "./www/dist/vite.svg")
-		
+
 		// Serve index.html for all other routes (SPA fallback)
 		router.NoRoute(func(c *gin.Context) {
 			c.File("./www/dist/index.html")
@@ -81,6 +87,7 @@ func main() {
 		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 		<-quit
 		log.Println("Shutting down server...")
+		cleanupCancel() // Stop the inactive stream cleanup job
 		db.Disconnect()
 		os.Exit(0)
 	}()
@@ -96,7 +103,7 @@ func main() {
 func corsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		origin := c.Request.Header.Get("Origin")
-		
+
 		// Check if origin is allowed
 		allowed := false
 		for _, allowedOrigin := range config.AppConfig.CorsAllowedOrigins {

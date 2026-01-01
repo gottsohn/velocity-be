@@ -28,38 +28,46 @@ type NavigationData struct {
 
 // StreamData represents the data sent from the mobile app
 type StreamData struct {
-	NavigationData     *NavigationData `json:"navigationData,omitempty" bson:"navigationData,omitempty"`
-	CurrentLocation    CurrentLocation `json:"currentLocation" bson:"currentLocation"`
-	CurrentSpeedKmh    float64         `json:"currentSpeedKmh" bson:"currentSpeedKmh"` // Current speed in km/h e.g. 190.3
-	Duration           float64         `json:"duration" bson:"duration"`
-	DistanceKm         float64         `json:"distanceKm" bson:"distanceKm"`
-	MaxSpeedKmh        float64         `json:"maxSpeedKmh" bson:"maxSpeedKmh"`
-	StartLatitude      float64         `json:"startLatitude" bson:"startLatitude"`
-	StartLongitude     float64         `json:"startLongitude" bson:"startLongitude"`
-	EndLatitude        float64         `json:"endLatitude" bson:"endLatitude"`
-	EndLongitude       float64         `json:"endLongitude" bson:"endLongitude"`
-	ExpectedDuration   float64         `json:"expectedDuration" bson:"expectedDuration"`
-	StartAddressLine   string          `json:"startAddressLine" bson:"startAddressLine"`
-	StartPostalCode    string          `json:"startPostalCode" bson:"startPostalCode"`
-	StartCity          string          `json:"startCity" bson:"startCity"`
-	EndAddressLine     string          `json:"endAddressLine" bson:"endAddressLine"`
-	EndPostalCode      string          `json:"endPostalCode" bson:"endPostalCode"`
-	EndCity            string          `json:"endCity" bson:"endCity"`
-	ExpectedDistanceKm *float64        `json:"expectedDistanceKm,omitempty" bson:"expectedDistanceKm,omitempty"`
-	Car                Car             `json:"car" bson:"car"`
-	IsPaused           bool            `json:"isPaused" bson:"isPaused"`
+	NavigationData         *NavigationData `json:"navigationData,omitempty" bson:"navigationData,omitempty"`
+	CurrentLocation        CurrentLocation `json:"currentLocation" bson:"currentLocation"`
+	CurrentSpeedKmh        float64         `json:"currentSpeedKmh" bson:"currentSpeedKmh"` // Current speed in km/h e.g. 190.3
+	Duration               float64         `json:"duration" bson:"duration"`
+	DistanceKm             float64         `json:"distanceKm" bson:"distanceKm"`
+	MaxSpeedKmh            float64         `json:"maxSpeedKmh" bson:"maxSpeedKmh"`
+	StartLatitude          float64         `json:"startLatitude" bson:"startLatitude"`
+	StartLongitude         float64         `json:"startLongitude" bson:"startLongitude"`
+	EndLatitude            float64         `json:"endLatitude" bson:"endLatitude"`
+	EndLongitude           float64         `json:"endLongitude" bson:"endLongitude"`
+	ExpectedDuration       float64         `json:"expectedDuration" bson:"expectedDuration"`
+	StartAddressLine       string          `json:"startAddressLine" bson:"startAddressLine"`
+	StartPostalCode        string          `json:"startPostalCode" bson:"startPostalCode"`
+	StartCity              string          `json:"startCity" bson:"startCity"`
+	EndAddressLine         string          `json:"endAddressLine" bson:"endAddressLine"`
+	EndPostalCode          string          `json:"endPostalCode" bson:"endPostalCode"`
+	EndCity                string          `json:"endCity" bson:"endCity"`
+	DestinationLatitude    float64         `json:"destinationLatitude" bson:"destinationLatitude"`
+	DestinationLongitude   float64         `json:"destinationLongitude" bson:"destinationLongitude"`
+	DestinationAddressLine string          `json:"destinationAddressLine" bson:"destinationAddressLine"`
+	DestinationPostalCode  string          `json:"destinationPostalCode" bson:"destinationPostalCode"`
+	DestinationCity        string          `json:"destinationCity" bson:"destinationCity"`
+	DestinationName        string          `json:"destinationName" bson:"destinationName"`
+	ExpectedDistanceKm     *float64        `json:"expectedDistanceKm,omitempty" bson:"expectedDistanceKm,omitempty"`
+	Car                    Car             `json:"car" bson:"car"`
+	IsPaused               bool            `json:"isPaused" bson:"isPaused"`
 }
 
 // Stream represents an active streaming session
 type Stream struct {
-	ID          primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	StreamID    string             `json:"streamId" bson:"streamId"`
-	CreatedAt   time.Time          `json:"createdAt" bson:"createdAt"`
-	UpdatedAt   time.Time          `json:"updatedAt" bson:"updatedAt"`
-	DeletedAt   *time.Time         `json:"deletedAt,omitempty" bson:"deletedAt,omitempty"`
-	IsActive    bool               `json:"isActive" bson:"isActive"`
-	LatestData  *StreamData        `json:"latestData,omitempty" bson:"latestData,omitempty"`
-	ViewerCount int                `json:"viewerCount" bson:"viewerCount"`
+	ID               primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	StreamID         string             `json:"streamId" bson:"streamId"`
+	CreatedAt        time.Time          `json:"createdAt" bson:"createdAt"`
+	UpdatedAt        time.Time          `json:"updatedAt" bson:"updatedAt"`
+	DeletedAt        *time.Time         `json:"deletedAt,omitempty" bson:"deletedAt,omitempty"`
+	IsActive         bool               `json:"isActive" bson:"isActive"`
+	LatestData       *StreamData        `json:"latestData,omitempty" bson:"latestData,omitempty"`
+	ViewerCount      int                `json:"viewerCount" bson:"viewerCount"`
+	LastConnectionAt *time.Time         `json:"lastConnectionAt,omitempty" bson:"lastConnectionAt,omitempty"` // Tracks when the last client was connected
+	AutoCancelled    bool               `json:"autoCancelled" bson:"autoCancelled"`                           // True if stream was auto-cancelled due to inactivity
 }
 
 // StreamJoinLog represents a log entry when someone joins a stream

@@ -34,6 +34,12 @@ export interface StreamData {
   endAddressLine: string;
   endPostalCode: string;
   endCity: string;
+  destinationLatitude: number;
+  destinationLongitude: number;
+  destinationAddressLine: string;
+  destinationPostalCode: string;
+  destinationCity: string;
+  destinationName: string;
   expectedDistanceKm?: number;
   car: Car;
   isPaused: boolean;

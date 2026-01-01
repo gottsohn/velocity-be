@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { 
+import {
   Container, 
   Grid, 
   Paper, 
@@ -26,11 +25,8 @@ interface DashboardProps {
 export function Dashboard({ streamId }: DashboardProps) {
   const { streamData, status, error, reconnect, isStreamClosed } = useWebSocket(streamId);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // Use a synchronous initial value - component is mounted when it renders
+  const mounted = true;
 
   // Show StreamClosed component when stream is closed
   if (isStreamClosed) {

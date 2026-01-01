@@ -1,16 +1,6 @@
-import { useRef } from 'react';
+import { useMemo } from 'react';
 import { Paper, Group, Stack, Text, Badge, ThemeIcon, useMantineTheme } from '@mantine/core';
 import type { StreamData } from '../types/stream';
-
-// Cached address data structure
-interface CachedAddressData {
-  startAddressLine: string;
-  startPostalCode: string;
-  startCity: string;
-  endAddressLine: string;
-  endPostalCode: string;
-  endCity: string;
-}
 
 interface StatsPanelProps {
   streamData: StreamData | null;
@@ -84,35 +74,19 @@ function StatCard({
 }
 
 export function StatsPanel({ streamData }: StatsPanelProps) {
-  // Cache address data - only update when new values are received
-  const cachedAddressData = useRef<CachedAddressData | null>(null);
-
-  // Update cache only when address properties are present
-  if (streamData) {
-    const hasStartAddress = streamData.startAddressLine || streamData.startPostalCode || streamData.startCity;
-    const hasEndAddress = streamData.endAddressLine || streamData.endPostalCode || streamData.endCity;
-    
-    if (hasStartAddress || hasEndAddress) {
-      cachedAddressData.current = {
-        startAddressLine: streamData.startAddressLine || cachedAddressData.current?.startAddressLine || '',
-        startPostalCode: streamData.startPostalCode || cachedAddressData.current?.startPostalCode || '',
-        startCity: streamData.startCity || cachedAddressData.current?.startCity || '',
-        endAddressLine: streamData.endAddressLine || cachedAddressData.current?.endAddressLine || '',
-        endPostalCode: streamData.endPostalCode || cachedAddressData.current?.endPostalCode || '',
-        endCity: streamData.endCity || cachedAddressData.current?.endCity || '',
-      };
-    }
-  }
-
-  // Use cached address data or fallback to empty strings
-  const addressData = cachedAddressData.current || {
-    startAddressLine: '',
-    startPostalCode: '',
-    startCity: '',
-    endAddressLine: '',
-    endPostalCode: '',
-    endCity: '',
-  };
+  // Compute address data directly from streamData
+  const addressData = useMemo(() => ({
+    startAddressLine: streamData?.startAddressLine || '',
+    startPostalCode: streamData?.startPostalCode || '',
+    startCity: streamData?.startCity || '',
+    endAddressLine: streamData?.endAddressLine || '',
+    endPostalCode: streamData?.endPostalCode || '',
+    endCity: streamData?.endCity || '',
+    destinationAddressLine: streamData?.destinationAddressLine || '',
+    destinationPostalCode: streamData?.destinationPostalCode || '',
+    destinationCity: streamData?.destinationCity || '',
+    destinationName: streamData?.destinationName || '',
+  }), [streamData]);
 
   if (!streamData) {
     return (
@@ -256,10 +230,10 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
             <Stack gap={2}>
               <Text size="xs" c="dimmed" tt="uppercase">To</Text>
               <Text size="sm" fw={600}>
-                {addressData.endAddressLine}
+                {addressData.destinationName}
               </Text>
               <Text size="xs" c="dimmed">
-                {addressData.endPostalCode} {addressData.endCity}
+                {addressData.destinationPostalCode} {addressData.destinationCity}
               </Text>
             </Stack>
           </Group>

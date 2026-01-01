@@ -1,5 +1,7 @@
 # Velocity - Real-time Drive Streaming
 
+[![CI](https://github.com/YOUR_USERNAME/velocity-be/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/velocity-be/actions/workflows/ci.yml)
+
 A real-time streaming application that allows mobile apps to stream driving data to web viewers.
 
 ## Architecture
@@ -50,6 +52,7 @@ A real-time streaming application that allows mobile apps to stream driving data
 - Go 1.21+
 - Node.js 18+
 - MongoDB running locally (or remote URI)
+- Docker (required for running integration tests)
 
 ### Installation
 
@@ -135,6 +138,53 @@ make docker-build
   - `/api/*` → API endpoints
   - `/ws/*` → WebSocket endpoints
   - `/*` → Static frontend files
+
+## Testing
+
+The project includes comprehensive integration tests that use [testcontainers-go](https://github.com/testcontainers/testcontainers-go) to spin up real MongoDB containers for each test.
+
+### Prerequisites
+
+- Docker running (required for testcontainers)
+
+### Running Tests
+
+```bash
+# Run all tests
+make test
+
+# Run integration tests only
+make test-integration
+
+# Run tests in short mode (skips long-running tests)
+make test-short
+
+# Run tests with coverage report
+make test-coverage
+```
+
+### Test Coverage
+
+| Category | Tests | Description |
+|----------|-------|-------------|
+| **Health Check** | 1 | Health endpoint validation |
+| **Stream API** | 6 | Create, get, delete streams with error cases |
+| **Feature Flags** | 2 | Default and database-driven feature flags |
+| **WebSocket** | 6 | Mobile/viewer connections, broadcasting, notifications |
+| **Concurrency** | 2 | Stream ID uniqueness and concurrent creation |
+
+**Total: 17 integration tests**
+
+### Test Details
+
+- **REST API Tests**: Validate all CRUD operations on streams and feature flags
+- **WebSocket Tests**: Test real WebSocket connections including:
+  - Mobile broadcaster connections
+  - Viewer connections and count tracking
+  - Message broadcasting from mobile to viewers
+  - Viewer count notifications to broadcaster
+  - Rejection of connections to deleted/non-existent streams
+- **Concurrency Tests**: Verify thread-safety with 20 concurrent stream creations
 
 ## API Endpoints
 
@@ -273,24 +323,62 @@ VITE_WS_URL=
 VITE_API_URL=
 ```
 
+## CI/CD
+
+This project uses GitHub Actions for continuous integration. The workflow runs on every push and pull request to the `main` branch.
+
+### Pipeline Jobs
+
+| Job | Description |
+|-----|-------------|
+| **Build Frontend** | Installs dependencies, lints, and builds the React app |
+| **Build Backend** | Downloads Go dependencies and compiles the binary |
+| **Integration Tests** | Runs all 17 integration tests with MongoDB testcontainers |
+
+### Workflow Features
+
+- **Caching**: Both Node.js and Go dependencies are cached for faster builds
+- **Artifacts**: Build outputs and coverage reports are uploaded as artifacts
+- **Coverage**: Test coverage report is generated and uploaded
+
+### Running Locally
+
+The CI workflow can be replicated locally:
+
+```bash
+# Frontend
+cd www && npm ci && npm run lint && npm run build
+
+# Backend
+go mod download && go build -v ./...
+
+# Tests
+go test ./tests/... -v -timeout 10m
+```
+
 ## Project Structure
 
 ```
 velocity-be/
-├── config/          # Configuration management
-├── db/              # MongoDB connection
-├── handlers/        # HTTP and WebSocket handlers
-├── hub/             # WebSocket hub for managing connections
-├── models/          # Data models
-├── main.go          # Entry point
-├── www/             # React frontend
+├── .github/
+│   └── workflows/
+│       └── ci.yml       # GitHub Actions CI workflow
+├── config/              # Configuration management
+├── db/                  # MongoDB connection
+├── handlers/            # HTTP and WebSocket handlers
+├── hub/                 # WebSocket hub for managing connections
+├── models/              # Data models
+├── tests/               # Integration tests
+│   └── integration_test.go
+├── main.go              # Entry point
+├── www/                 # React frontend
 │   ├── src/
-│   │   ├── components/   # React components
-│   │   ├── hooks/        # Custom hooks
-│   │   ├── pages/        # Page components
-│   │   └── types/        # TypeScript types
+│   │   ├── components/  # React components
+│   │   ├── hooks/       # Custom hooks
+│   │   ├── pages/       # Page components
+│   │   └── types/       # TypeScript types
 │   └── ...
-└── Makefile         # Build and run commands
+└── Makefile             # Build and run commands
 ```
 
 ## License
