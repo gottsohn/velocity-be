@@ -1,4 +1,4 @@
-.PHONY: all run run-backend run-frontend install build clean help dev docker-build docker-up docker-down docker-logs test test-integration test-verbose
+.PHONY: all run run-backend run-frontend install build clean help dev docker-build docker-up docker-down docker-logs test test-integration test-verbose lint lint-go lint-frontend lint-fix
 
 # Default target
 all: install
@@ -94,6 +94,29 @@ test-coverage:
 	go tool cover -html=coverage.out -o coverage.html
 	@echo "📊 Coverage report generated: coverage.html"
 
+# Lint commands
+lint: lint-go lint-frontend
+	@echo "✅ All lint checks complete!"
+
+lint-go:
+	@echo "🔍 Linting Go code..."
+	@gofmt -l -w .
+	@go vet ./...
+	@echo "✅ Go lint complete!"
+
+lint-frontend:
+	@echo "🔍 Linting frontend code..."
+	cd www && npm run lint
+	@echo "✅ Frontend lint complete!"
+
+lint-fix:
+	@echo "🔧 Fixing lint issues..."
+	@echo "→ Formatting Go code..."
+	@gofmt -l -w .
+	@echo "→ Fixing frontend issues..."
+	cd www && npm run lint:fix
+	@echo "✅ Lint fix complete!"
+
 # Docker commands
 docker-build:
 	@echo "🐳 Building Docker image..."
@@ -132,6 +155,12 @@ help:
 	@echo "  make test-integration - Run integration tests (requires Docker)"
 	@echo "  make test-short       - Run tests in short mode"
 	@echo "  make test-coverage    - Run tests with coverage report"
+	@echo ""
+	@echo "Linting:"
+	@echo "  make lint             - Run all linters (Go + frontend)"
+	@echo "  make lint-go          - Lint Go code (gofmt + go vet)"
+	@echo "  make lint-frontend    - Lint frontend code (eslint)"
+	@echo "  make lint-fix         - Fix lint issues in both Go and frontend"
 	@echo ""
 	@echo "Docker:"
 	@echo "  make docker-build - Build Docker image"

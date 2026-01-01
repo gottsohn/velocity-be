@@ -31,23 +31,23 @@ type Client struct {
 type Hub struct {
 	// Registered clients grouped by stream ID
 	Streams map[string]*StreamHub
-	
+
 	// Register requests from clients
 	Register chan *Client
-	
+
 	// Unregister requests from clients
 	Unregister chan *Client
-	
+
 	// Mutex for thread-safe access
 	mu sync.RWMutex
 }
 
 // StreamHub manages clients for a specific stream
 type StreamHub struct {
-	StreamID   string
+	StreamID    string
 	Broadcaster *Client
-	Viewers    map[*Client]bool
-	mu         sync.RWMutex
+	Viewers     map[*Client]bool
+	mu          sync.RWMutex
 }
 
 // NewHub creates a new Hub instance
@@ -98,7 +98,7 @@ func (h *Hub) registerClient(client *Client) {
 
 		// Notify broadcaster about viewer count (newUser: true because a user just joined)
 		h.notifyBroadcasterViewerCount(streamHub, viewerCount, true)
-		
+
 		log.Printf("Viewer joined stream %s (total viewers: %d)", client.StreamID, viewerCount)
 	}
 }
@@ -115,7 +115,7 @@ func (h *Hub) unregisterClient(client *Client) {
 	if client.IsMobile {
 		streamHub.Broadcaster = nil
 		log.Printf("Mobile broadcaster disconnected from stream: %s", client.StreamID)
-		
+
 		// Close all viewer connections when broadcaster leaves
 		streamHub.mu.Lock()
 		for viewer := range streamHub.Viewers {
@@ -137,7 +137,7 @@ func (h *Hub) unregisterClient(client *Client) {
 
 		// Notify broadcaster about viewer count (newUser: false because a user left)
 		h.notifyBroadcasterViewerCount(streamHub, viewerCount, false)
-		
+
 		log.Printf("Viewer left stream %s (total viewers: %d)", client.StreamID, viewerCount)
 	}
 
@@ -145,11 +145,11 @@ func (h *Hub) unregisterClient(client *Client) {
 	streamHub.mu.RLock()
 	isEmpty := streamHub.Broadcaster == nil && len(streamHub.Viewers) == 0
 	streamHub.mu.RUnlock()
-	
+
 	if isEmpty {
 		delete(h.Streams, client.StreamID)
 		log.Printf("Stream hub %s removed (no clients)", client.StreamID)
-		
+
 		// Update LastConnectionAt in database when all clients disconnect
 		go updateLastConnectionTime(client.StreamID)
 	}

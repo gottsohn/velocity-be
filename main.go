@@ -74,7 +74,7 @@ func main() {
 		// Serve static files from www/dist
 		router.Static("/assets", "./www/dist/assets")
 		router.StaticFile("/vite.svg", "./www/dist/vite.svg")
-		
+
 		// Serve index.html for all other routes (SPA fallback)
 		router.NoRoute(func(c *gin.Context) {
 			c.File("./www/dist/index.html")
@@ -103,7 +103,7 @@ func main() {
 func corsMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		origin := c.Request.Header.Get("Origin")
-		
+
 		// Check if origin is allowed
 		allowed := false
 		for _, allowedOrigin := range config.AppConfig.CorsAllowedOrigins {
