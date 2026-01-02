@@ -7,14 +7,19 @@ import {
   useMantineColorScheme,
   Paper,
   ThemeIcon,
+  Group,
+  ActionIcon,
 } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 interface StreamClosedProps {
   streamId: string;
 }
 
 export function StreamClosed({ streamId }: StreamClosedProps) {
-  const { colorScheme } = useMantineColorScheme();
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { t } = useTranslation();
 
   return (
     <Box
@@ -30,6 +35,28 @@ export function StreamClosed({ streamId }: StreamClosedProps) {
         overflow: 'hidden',
       }}
     >
+      {/* Language and theme switcher */}
+      <Group
+        gap="xs"
+        style={{
+          position: 'absolute',
+          top: 20,
+          right: 20,
+          zIndex: 10,
+        }}
+      >
+        <LanguageSwitcher />
+        <ActionIcon
+          variant="light"
+          size="lg"
+          radius="xl"
+          onClick={() => toggleColorScheme()}
+          color="gray"
+        >
+          {colorScheme === 'dark' ? '☀️' : '🌙'}
+        </ActionIcon>
+      </Group>
+
       {/* Decorative gradient overlay */}
       <Box
         style={{
@@ -83,11 +110,10 @@ export function StreamClosed({ streamId }: StreamClosedProps) {
                   WebkitTextFillColor: 'transparent',
                 }}
               >
-                Stream Ended
+                {t('streamClosed.title')}
               </Title>
               <Text size="lg" c="dimmed" ta="center" maw={400}>
-                This stream has been closed by the broadcaster. 
-                The journey has come to an end.
+                {t('streamClosed.description')}
               </Text>
             </Stack>
 
@@ -102,7 +128,7 @@ export function StreamClosed({ streamId }: StreamClosedProps) {
             >
               <Stack gap={4} align="center">
                 <Text size="xs" c="dimmed" tt="uppercase" fw={500}>
-                  Stream ID
+                  {t('streamClosed.streamId')}
                 </Text>
                 <Text ff="monospace" fw={600} c="orange">
                   {streamId}
@@ -111,7 +137,7 @@ export function StreamClosed({ streamId }: StreamClosedProps) {
             </Paper>
 
             <Text size="sm" c="dimmed">
-              Thank you for watching! 🚗💨
+              {t('streamClosed.thankYou')} 🚗💨
             </Text>
           </Stack>
         </Paper>

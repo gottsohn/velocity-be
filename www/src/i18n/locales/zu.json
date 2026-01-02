@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Fast & Curiious — Live",
+    "streamId": "I-ID Yokusebenza"
+  },
+  "stats": {
+    "waitingForData": "Ilinde idatha yokusakaza...",
+    "hp": "HP",
+    "currentSpeed": "Isivinini Samanje",
+    "kmh": "km/h",
+    "duration": "Ubude Besikhathi",
+    "distance": "Ibanga",
+    "km": "km",
+    "maxSpeed": "Isivinini Esiphezulu",
+    "progress": "Inqubekela Phambili",
+    "from": "Kusuka",
+    "to": "Kuya",
+    "expectedTime": "Isikhathi Esilindelekile",
+    "expectedDistance": "Ibanga Elilindelekile"
+  },
+  "connection": {
+    "live": "Bukhoma",
+    "connecting": "Ixhumanisa...",
+    "disconnected": "Kunqanyuliwe",
+    "connectionError": "Iphutha Lokuxhuma",
+    "streamClosed": "Ukusakaza Kuvalwe",
+    "reconnect": "Xhuma Futhi"
+  },
+  "streamClosed": {
+    "title": "Ukusakaza Kuphelile",
+    "description": "Lokhu kusakaza kuvalwe ngumsakazi. Uhambo seluphelile.",
+    "streamId": "I-ID Yokusebenza",
+    "thankYou": "Siyabonga ngokubuka!"
+  },
+  "streamPaused": {
+    "title": "Ukusakaza Kumisiwe",
+    "description": "Umsakazi umise ukusakaza.",
+    "resumeShortly": "Kuzoqhubeka maduzane..."
+  },
+  "notFound": {
+    "title": "Ukusakaza Akutholakalanga",
+    "description": "Le-ID yokusakaza ayikho noma isiphelelwe isikhathi.",
+    "checkUrl": "Sicela uhlole i-URL bese uzama futhi.",
+    "addStreamId": "Engeza i-ID yokusakaza ku-URL kanje:",
+    "refreshPage": "Vuselela Ikhasi"
+  },
+  "language": {
+    "select": "Khetha Ulimi"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Fast & Curiious — Live",
+    "streamId": "ID da transmissão"
+  },
+  "stats": {
+    "waitingForData": "A aguardar dados da transmissão...",
+    "hp": "cv",
+    "currentSpeed": "Velocidade atual",
+    "kmh": "km/h",
+    "duration": "Duração",
+    "distance": "Distância",
+    "km": "km",
+    "maxSpeed": "Velocidade máx.",
+    "progress": "Progresso",
+    "from": "De",
+    "to": "Para",
+    "expectedTime": "Tempo previsto",
+    "expectedDistance": "Distância prevista"
+  },
+  "connection": {
+    "live": "Em direto",
+    "connecting": "A ligar...",
+    "disconnected": "Desligado",
+    "connectionError": "Erro de ligação",
+    "streamClosed": "Transmissão encerrada",
+    "reconnect": "Religar"
+  },
+  "streamClosed": {
+    "title": "Transmissão terminada",
+    "description": "Esta transmissão foi encerrada pelo emissor. A viagem chegou ao fim.",
+    "streamId": "ID da transmissão",
+    "thankYou": "Obrigado por assistir!"
+  },
+  "streamPaused": {
+    "title": "Transmissão em pausa",
+    "description": "O emissor pausou a transmissão.",
+    "resumeShortly": "Será retomada em breve..."
+  },
+  "notFound": {
+    "title": "Transmissão não encontrada",
+    "description": "Este ID de transmissão não existe ou expirou.",
+    "checkUrl": "Por favor, verifique o URL e tente novamente.",
+    "addStreamId": "Adicione um ID de transmissão ao URL assim:",
+    "refreshPage": "Atualizar página"
+  },
+  "language": {
+    "select": "Selecionar idioma"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Fast & Curiious — Live",
+    "streamId": "ID streamu"
+  },
+  "stats": {
+    "waitingForData": "Oczekiwanie na dane streamu...",
+    "hp": "KM",
+    "currentSpeed": "Aktualna prędkość",
+    "kmh": "km/h",
+    "duration": "Czas trwania",
+    "distance": "Dystans",
+    "km": "km",
+    "maxSpeed": "Maks. prędkość",
+    "progress": "Postęp",
+    "from": "Z",
+    "to": "Do",
+    "expectedTime": "Przewidywany czas",
+    "expectedDistance": "Przewidywany dystans"
+  },
+  "connection": {
+    "live": "Na żywo",
+    "connecting": "Łączenie...",
+    "disconnected": "Rozłączono",
+    "connectionError": "Błąd połączenia",
+    "streamClosed": "Stream zamknięty",
+    "reconnect": "Połącz ponownie"
+  },
+  "streamClosed": {
+    "title": "Stream zakończony",
+    "description": "Ten stream został zamknięty przez nadawcę. Podróż dobiegła końca.",
+    "streamId": "ID streamu",
+    "thankYou": "Dziękujemy za oglądanie!"
+  },
+  "streamPaused": {
+    "title": "Stream wstrzymany",
+    "description": "Nadawca wstrzymał stream.",
+    "resumeShortly": "Wkrótce zostanie wznowiony..."
+  },
+  "notFound": {
+    "title": "Stream nie znaleziony",
+    "description": "Ten ID streamu nie istnieje lub wygasł.",
+    "checkUrl": "Sprawdź adres URL i spróbuj ponownie.",
+    "addStreamId": "Dodaj ID streamu do adresu URL w ten sposób:",
+    "refreshPage": "Odśwież stronę"
+  },
+  "language": {
+    "select": "Wybierz język"
+  }
+}

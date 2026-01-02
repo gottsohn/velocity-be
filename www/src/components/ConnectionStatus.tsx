@@ -1,4 +1,5 @@
 import { Badge, Group, ActionIcon, Tooltip } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import type { ConnectionStatus as ConnectionStatusType } from '../types/stream';
 
 interface ConnectionStatusProps {
@@ -7,6 +8,8 @@ interface ConnectionStatusProps {
 }
 
 export function ConnectionStatus({ status, onReconnect }: ConnectionStatusProps) {
+  const { t } = useTranslation();
+
   const getStatusColor = () => {
     switch (status) {
       case 'connected': return 'green';
@@ -19,11 +22,11 @@ export function ConnectionStatus({ status, onReconnect }: ConnectionStatusProps)
 
   const getStatusText = () => {
     switch (status) {
-      case 'connected': return 'Live';
-      case 'connecting': return 'Connecting...';
-      case 'disconnected': return 'Disconnected';
-      case 'error': return 'Connection Error';
-      case 'closed': return 'Stream Closed';
+      case 'connected': return t('connection.live');
+      case 'connecting': return t('connection.connecting');
+      case 'disconnected': return t('connection.disconnected');
+      case 'error': return t('connection.connectionError');
+      case 'closed': return t('connection.streamClosed');
     }
   };
 
@@ -47,7 +50,7 @@ export function ConnectionStatus({ status, onReconnect }: ConnectionStatusProps)
       </Badge>
       
       {(status === 'disconnected' || status === 'error') && (
-        <Tooltip label="Reconnect">
+        <Tooltip label={t('connection.reconnect')}>
           <ActionIcon 
             variant="light" 
             color="orange" 

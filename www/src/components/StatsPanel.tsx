@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Paper, Group, Stack, Text, Badge, ThemeIcon, useMantineTheme } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import type { StreamData } from '../types/stream';
 
 interface CachedAddressData {
@@ -100,6 +101,7 @@ function StatCard({
 }
 
 export function StatsPanel({ streamData }: StatsPanelProps) {
+  const { t } = useTranslation();
   // Cache address data - only update when new non-empty values are received
   const [addressData, setAddressData] = useState<CachedAddressData>(defaultAddressData);
   const [prevStreamData, setPrevStreamData] = useState<StreamData | null>(null);
@@ -129,7 +131,7 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
     return (
       <Paper p="xl" radius="lg" withBorder>
         <Text c="dimmed" ta="center">
-          Waiting for stream data...
+          {t('stats.waitingForData')}
         </Text>
       </Paper>
     );
@@ -158,7 +160,7 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
             </Text>
             <Group gap="xs">
               <Badge variant="light" color="orange" size="sm">
-                {streamData.car?.horsePower ?? "-"} HP
+                {streamData.car?.horsePower ?? "-"} {t('stats.hp')}
               </Badge>
             </Group>
           </Stack>
@@ -178,14 +180,14 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
         <Group justify="space-between" align="center">
           <Stack gap={2}>
             <Text size="xs" c="dimmed" tt="uppercase" fw={500}>
-              Current Speed
+              {t('stats.currentSpeed')}
             </Text>
             <Group gap={4} align="baseline">
               <Text size="2.5rem" fw={700} c="blue" style={{ lineHeight: 1 }}>
                 {streamData.currentSpeedKmh.toFixed(1)}
               </Text>
               <Text size="lg" c="dimmed">
-                km/h
+                {t('stats.kmh')}
               </Text>
             </Group>
           </Stack>
@@ -201,25 +203,25 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
       }}>
         <StatCard 
           icon="⏱️" 
-          label="Duration" 
+          label={t('stats.duration')} 
           value={formatDuration(streamData.duration)} 
         />
         <StatCard 
           icon="📏" 
-          label="Distance" 
+          label={t('stats.distance')} 
           value={streamData.distanceKm.toFixed(2)} 
-          unit="km"
+          unit={t('stats.km')}
         />
         <StatCard 
           icon="🚀" 
-          label="Max Speed" 
+          label={t('stats.maxSpeed')} 
           value={streamData.maxSpeedKmh.toFixed(1)} 
-          unit="km/h"
+          unit={t('stats.kmh')}
           color="red"
         />
         <StatCard 
           icon="📊" 
-          label="Progress" 
+          label={t('stats.progress')} 
           value={progress.toFixed(0)} 
           unit="%"
           color="teal"
@@ -241,7 +243,7 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
               <span style={{ fontSize: '0.8rem' }}>📍</span>
             </ThemeIcon>
             <Stack gap={2}>
-              <Text size="xs" c="dimmed" tt="uppercase">From</Text>
+              <Text size="xs" c="dimmed" tt="uppercase">{t('stats.from')}</Text>
               <Text size="sm" fw={600}>
                 {addressData.startAddressLine}
               </Text>
@@ -265,7 +267,7 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
               <span style={{ fontSize: '0.8rem' }}>🎯</span>
             </ThemeIcon>
             <Stack gap={2}>
-              <Text size="xs" c="dimmed" tt="uppercase">To</Text>
+              <Text size="xs" c="dimmed" tt="uppercase">{t('stats.to')}</Text>
               <Text size="sm" fw={600}>
                 {addressData.destinationName}
               </Text>
@@ -281,7 +283,7 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
       <Group grow>
         <Paper p="md" radius="md" withBorder>
           <Stack gap={2} align="center">
-            <Text size="xs" c="dimmed">Expected Time</Text>
+            <Text size="xs" c="dimmed">{t('stats.expectedTime')}</Text>
             <Text size="lg" fw={700}>
               {formatDuration(streamData.expectedDuration)}
             </Text>
@@ -290,9 +292,9 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
         {streamData.expectedDistanceKm && (
           <Paper p="md" radius="md" withBorder>
             <Stack gap={2} align="center">
-              <Text size="xs" c="dimmed">Expected Distance</Text>
+              <Text size="xs" c="dimmed">{t('stats.expectedDistance')}</Text>
               <Text size="lg" fw={700}>
-                {streamData.expectedDistanceKm.toFixed(1)} km
+                {streamData.expectedDistanceKm.toFixed(1)} {t('stats.km')}
               </Text>
             </Stack>
           </Paper>
