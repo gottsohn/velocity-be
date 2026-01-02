@@ -1,6 +1,32 @@
-import { useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Paper, Group, Stack, Text, Badge, ThemeIcon, useMantineTheme } from '@mantine/core';
 import type { StreamData } from '../types/stream';
+
+interface CachedAddressData {
+  startAddressLine: string;
+  startPostalCode: string;
+  startCity: string;
+  endAddressLine: string;
+  endPostalCode: string;
+  endCity: string;
+  destinationAddressLine: string;
+  destinationPostalCode: string;
+  destinationCity: string;
+  destinationName: string;
+}
+
+const defaultAddressData: CachedAddressData = {
+  startAddressLine: '',
+  startPostalCode: '',
+  startCity: '',
+  endAddressLine: '',
+  endPostalCode: '',
+  endCity: '',
+  destinationAddressLine: '',
+  destinationPostalCode: '',
+  destinationCity: '',
+  destinationName: '',
+};
 
 interface StatsPanelProps {
   streamData: StreamData | null;
@@ -74,19 +100,26 @@ function StatCard({
 }
 
 export function StatsPanel({ streamData }: StatsPanelProps) {
-  // Compute address data directly from streamData
-  const addressData = useMemo(() => ({
-    startAddressLine: streamData?.startAddressLine || '',
-    startPostalCode: streamData?.startPostalCode || '',
-    startCity: streamData?.startCity || '',
-    endAddressLine: streamData?.endAddressLine || '',
-    endPostalCode: streamData?.endPostalCode || '',
-    endCity: streamData?.endCity || '',
-    destinationAddressLine: streamData?.destinationAddressLine || '',
-    destinationPostalCode: streamData?.destinationPostalCode || '',
-    destinationCity: streamData?.destinationCity || '',
-    destinationName: streamData?.destinationName || '',
-  }), [streamData]);
+  // Cache address data - only update when new values are received
+  const [addressData, setAddressData] = useState<CachedAddressData>(defaultAddressData);
+
+  // Update cached values only when new non-empty values arrive
+  useEffect(() => {
+    if (streamData) {
+      setAddressData((prev) => ({
+        startAddressLine: streamData.startAddressLine || prev.startAddressLine,
+        startPostalCode: streamData.startPostalCode || prev.startPostalCode,
+        startCity: streamData.startCity || prev.startCity,
+        endAddressLine: streamData.endAddressLine || prev.endAddressLine,
+        endPostalCode: streamData.endPostalCode || prev.endPostalCode,
+        endCity: streamData.endCity || prev.endCity,
+        destinationAddressLine: streamData.destinationAddressLine || prev.destinationAddressLine,
+        destinationPostalCode: streamData.destinationPostalCode || prev.destinationPostalCode,
+        destinationCity: streamData.destinationCity || prev.destinationCity,
+        destinationName: streamData.destinationName || prev.destinationName,
+      }));
+    }
+  }, [streamData]);
 
   if (!streamData) {
     return (
