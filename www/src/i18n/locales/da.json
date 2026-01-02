@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Fast & Curiious — Live",
+    "streamId": "Stream-ID"
+  },
+  "stats": {
+    "waitingForData": "Venter på streamdata...",
+    "hp": "HK",
+    "currentSpeed": "Aktuel hastighed",
+    "kmh": "km/t",
+    "duration": "Varighed",
+    "distance": "Distance",
+    "km": "km",
+    "maxSpeed": "Maks. hastighed",
+    "progress": "Fremgang",
+    "from": "Fra",
+    "to": "Til",
+    "expectedTime": "Forventet tid",
+    "expectedDistance": "Forventet distance"
+  },
+  "connection": {
+    "live": "Live",
+    "connecting": "Forbinder...",
+    "disconnected": "Afbrudt",
+    "connectionError": "Forbindelsesfejl",
+    "streamClosed": "Stream lukket",
+    "reconnect": "Genopret forbindelse"
+  },
+  "streamClosed": {
+    "title": "Stream afsluttet",
+    "description": "Denne stream er blevet lukket af udbyderen. Rejsen er slut.",
+    "streamId": "Stream-ID",
+    "thankYou": "Tak fordi du så med!"
+  },
+  "streamPaused": {
+    "title": "Stream sat på pause",
+    "description": "Udbyderen har sat streamen på pause.",
+    "resumeShortly": "Den genoptages snart..."
+  },
+  "notFound": {
+    "title": "Stream ikke fundet",
+    "description": "Dette stream-ID findes ikke eller er udløbet.",
+    "checkUrl": "Tjek venligst URL'en og prøv igen.",
+    "addStreamId": "Tilføj et stream-ID til URL'en sådan:",
+    "refreshPage": "Opdater side"
+  },
+  "language": {
+    "select": "Vælg sprog"
+  }
+}

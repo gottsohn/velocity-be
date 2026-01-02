@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Fast & Curiious — Live",
+    "streamId": "ID трансляции"
+  },
+  "stats": {
+    "waitingForData": "Ожидание данных трансляции...",
+    "hp": "л.с.",
+    "currentSpeed": "Текущая скорость",
+    "kmh": "км/ч",
+    "duration": "Длительность",
+    "distance": "Расстояние",
+    "km": "км",
+    "maxSpeed": "Макс. скорость",
+    "progress": "Прогресс",
+    "from": "Откуда",
+    "to": "Куда",
+    "expectedTime": "Ожидаемое время",
+    "expectedDistance": "Ожидаемое расстояние"
+  },
+  "connection": {
+    "live": "В эфире",
+    "connecting": "Подключение...",
+    "disconnected": "Отключено",
+    "connectionError": "Ошибка подключения",
+    "streamClosed": "Трансляция закрыта",
+    "reconnect": "Переподключить"
+  },
+  "streamClosed": {
+    "title": "Трансляция завершена",
+    "description": "Эта трансляция была закрыта автором. Путешествие подошло к концу.",
+    "streamId": "ID трансляции",
+    "thankYou": "Спасибо за просмотр!"
+  },
+  "streamPaused": {
+    "title": "Трансляция приостановлена",
+    "description": "Автор приостановил трансляцию.",
+    "resumeShortly": "Она скоро возобновится..."
+  },
+  "notFound": {
+    "title": "Трансляция не найдена",
+    "description": "Этот ID трансляции не существует или истёк.",
+    "checkUrl": "Пожалуйста, проверьте URL и попробуйте снова.",
+    "addStreamId": "Добавьте ID трансляции в URL следующим образом:",
+    "refreshPage": "Обновить страницу"
+  },
+  "language": {
+    "select": "Выбрать язык"
+  }
+}

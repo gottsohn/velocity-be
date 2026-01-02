@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Fast & Curiious — Live",
+    "streamId": "Kitambulisho cha Utiririshaji"
+  },
+  "stats": {
+    "waitingForData": "Inasubiri data ya utiririshaji...",
+    "hp": "HP",
+    "currentSpeed": "Kasi ya Sasa",
+    "kmh": "km/saa",
+    "duration": "Muda",
+    "distance": "Umbali",
+    "km": "km",
+    "maxSpeed": "Kasi ya Juu",
+    "progress": "Maendeleo",
+    "from": "Kutoka",
+    "to": "Kwenda",
+    "expectedTime": "Muda Unaotarajiwa",
+    "expectedDistance": "Umbali Unaotarajiwa"
+  },
+  "connection": {
+    "live": "Moja kwa Moja",
+    "connecting": "Inaunganisha...",
+    "disconnected": "Imekatika",
+    "connectionError": "Hitilafu ya Muunganisho",
+    "streamClosed": "Utiririshaji Umefungwa",
+    "reconnect": "Unganisha Tena"
+  },
+  "streamClosed": {
+    "title": "Utiririshaji Umeisha",
+    "description": "Utiririshaji huu umefungwa na mtangazaji. Safari imefika mwisho.",
+    "streamId": "Kitambulisho cha Utiririshaji",
+    "thankYou": "Asante kwa kutazama!"
+  },
+  "streamPaused": {
+    "title": "Utiririshaji Umesimamishwa",
+    "description": "Mtangazaji amesimamisha utiririshaji.",
+    "resumeShortly": "Utaendelea hivi karibuni..."
+  },
+  "notFound": {
+    "title": "Utiririshaji Haujapatikana",
+    "description": "Kitambulisho hiki cha utiririshaji hakipo au kimeisha muda.",
+    "checkUrl": "Tafadhali angalia URL na ujaribu tena.",
+    "addStreamId": "Ongeza kitambulisho cha utiririshaji kwenye URL kama hivi:",
+    "refreshPage": "Onyesha Upya Ukurasa"
+  },
+  "language": {
+    "select": "Chagua Lugha"
+  }
+}

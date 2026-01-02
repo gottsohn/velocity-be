@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Fast & Curiious — Live",
+    "streamId": "ID Ṣíṣàn"
+  },
+  "stats": {
+    "waitingForData": "Ń dúró de dátà ṣíṣàn...",
+    "hp": "HP",
+    "currentSpeed": "Ìyára Báyìí",
+    "kmh": "km/wákàtí",
+    "duration": "Àkókò",
+    "distance": "Jíjìn",
+    "km": "km",
+    "maxSpeed": "Ìyára Gíga Jù",
+    "progress": "Ìlọsíwájú",
+    "from": "Láti",
+    "to": "Sí",
+    "expectedTime": "Àkókò Tí A Retí",
+    "expectedDistance": "Jíjìn Tí A Retí"
+  },
+  "connection": {
+    "live": "Lásìkò",
+    "connecting": "Ń sopọ̀...",
+    "disconnected": "Ti Yà Sọ́tọ̀",
+    "connectionError": "Àṣìṣe Ìsopọ̀",
+    "streamClosed": "Ṣíṣàn Ti Padé",
+    "reconnect": "Tún Sopọ̀"
+  },
+  "streamClosed": {
+    "title": "Ṣíṣàn Ti Parí",
+    "description": "Olùṣàfihàn ti pa ṣíṣàn yìí. Ìrìn-àjò ti dópin.",
+    "streamId": "ID Ṣíṣàn",
+    "thankYou": "A dúpẹ́ fún wíwò!"
+  },
+  "streamPaused": {
+    "title": "Ṣíṣàn Ti Dúró",
+    "description": "Olùṣàfihàn ti dá ṣíṣàn dúró.",
+    "resumeShortly": "Yóò tún bẹ̀rẹ̀ láìpẹ́..."
+  },
+  "notFound": {
+    "title": "Kò Rí Ṣíṣàn",
+    "description": "ID ṣíṣàn yìí kò sí tàbí ti parí.",
+    "checkUrl": "Jọ̀wọ́ ṣàyẹ̀wò URL náà kí o tún gbìyànjú.",
+    "addStreamId": "Fi ID ṣíṣàn kún URL bíi èyí:",
+    "refreshPage": "Mú Ojú-Ìwé Tuntun"
+  },
+  "language": {
+    "select": "Yan Èdè"
+  }
+}

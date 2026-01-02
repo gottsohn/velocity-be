@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Fast & Curiious — Live",
+    "streamId": "直播 ID"
+  },
+  "stats": {
+    "waitingForData": "正在等待直播數據...",
+    "hp": "匹",
+    "currentSpeed": "當前速度",
+    "kmh": "公里/小時",
+    "duration": "時長",
+    "distance": "距離",
+    "km": "公里",
+    "maxSpeed": "最高速度",
+    "progress": "進度",
+    "from": "起點",
+    "to": "終點",
+    "expectedTime": "預計時間",
+    "expectedDistance": "預計距離"
+  },
+  "connection": {
+    "live": "直播中",
+    "connecting": "連接中...",
+    "disconnected": "已斷開",
+    "connectionError": "連接錯誤",
+    "streamClosed": "直播已結束",
+    "reconnect": "重新連接"
+  },
+  "streamClosed": {
+    "title": "直播已結束",
+    "description": "主播已關閉此直播。旅程已結束。",
+    "streamId": "直播 ID",
+    "thankYou": "感謝收看！"
+  },
+  "streamPaused": {
+    "title": "直播已暫停",
+    "description": "主播已暫停直播。",
+    "resumeShortly": "即將恢復..."
+  },
+  "notFound": {
+    "title": "找不到直播",
+    "description": "此直播 ID 不存在或已過期。",
+    "checkUrl": "請檢查網址並重試。",
+    "addStreamId": "在網址中添加直播 ID：",
+    "refreshPage": "刷新頁面"
+  },
+  "language": {
+    "select": "選擇語言"
+  }
+}

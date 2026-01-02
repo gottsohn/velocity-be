@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Fast & Curiious — Live",
+    "streamId": "Stream-ID"
+  },
+  "stats": {
+    "waitingForData": "Wachten op streamgegevens...",
+    "hp": "PK",
+    "currentSpeed": "Huidige snelheid",
+    "kmh": "km/u",
+    "duration": "Duur",
+    "distance": "Afstand",
+    "km": "km",
+    "maxSpeed": "Max. snelheid",
+    "progress": "Voortgang",
+    "from": "Van",
+    "to": "Naar",
+    "expectedTime": "Verwachte tijd",
+    "expectedDistance": "Verwachte afstand"
+  },
+  "connection": {
+    "live": "Live",
+    "connecting": "Verbinden...",
+    "disconnected": "Verbinding verbroken",
+    "connectionError": "Verbindingsfout",
+    "streamClosed": "Stream gesloten",
+    "reconnect": "Opnieuw verbinden"
+  },
+  "streamClosed": {
+    "title": "Stream beëindigd",
+    "description": "Deze stream is gesloten door de uitzender. De reis is ten einde.",
+    "streamId": "Stream-ID",
+    "thankYou": "Bedankt voor het kijken!"
+  },
+  "streamPaused": {
+    "title": "Stream gepauzeerd",
+    "description": "De uitzender heeft de stream gepauzeerd.",
+    "resumeShortly": "Het zal binnenkort worden hervat..."
+  },
+  "notFound": {
+    "title": "Stream niet gevonden",
+    "description": "Deze stream-ID bestaat niet of is verlopen.",
+    "checkUrl": "Controleer de URL en probeer het opnieuw.",
+    "addStreamId": "Voeg een stream-ID toe aan de URL zoals:",
+    "refreshPage": "Pagina vernieuwen"
+  },
+  "language": {
+    "select": "Selecteer taal"
+  }
+}

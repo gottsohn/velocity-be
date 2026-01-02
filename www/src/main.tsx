@@ -8,6 +8,9 @@ import '@mantine/notifications/styles.css'
 import 'leaflet/dist/leaflet.css'
 import './index.css'
 
+// Initialize i18n
+import './i18n'
+
 const theme = createTheme({
   primaryColor: 'orange',
   colors: {

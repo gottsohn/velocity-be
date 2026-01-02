@@ -11,12 +11,14 @@ import {
   Stack,
   Transition,
 } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import { useWebSocket } from '../hooks/useWebSocket';
 import { RouteMap } from '../components/RouteMap';
 import { StatsPanel } from '../components/StatsPanel';
 import { ConnectionStatus } from '../components/ConnectionStatus';
 import { StreamClosed } from '../components/StreamClosed';
 import { StreamPaused } from '../components/StreamPaused';
+import { LanguageSwitcher } from '../components/LanguageSwitcher';
 
 interface DashboardProps {
   streamId: string;
@@ -25,6 +27,7 @@ interface DashboardProps {
 export function Dashboard({ streamId }: DashboardProps) {
   const { streamData, status, error, reconnect, isStreamClosed } = useWebSocket(streamId);
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+  const { t } = useTranslation();
   // Use a synchronous initial value - component is mounted when it renders
   const mounted = true;
 
@@ -91,16 +94,17 @@ export function Dashboard({ streamId }: DashboardProps) {
                     <Text size="2rem">🏁</Text>
                     <Stack gap={0}>
                       <Title order={2} style={{ letterSpacing: '-0.02em' }}>
-                        Velocity Live
+                        {t('dashboard.title')}
                       </Title>
                       <Text size="sm" c="dimmed">
-                        Stream ID: <Text span ff="monospace" fw={600} c="orange">{streamId}</Text>
+                        {t('dashboard.streamId')}: <Text span ff="monospace" fw={600} c="orange">{streamId}</Text>
                       </Text>
                     </Stack>
                   </Group>
 
                   <Group gap="md">
                     <ConnectionStatus status={status} onReconnect={reconnect} />
+                    <LanguageSwitcher />
                     <ActionIcon
                       variant="light"
                       size="lg"

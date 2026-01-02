@@ -4,9 +4,11 @@ import {
   Stack,
   useMantineColorScheme,
 } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
 export function StreamPaused() {
   const { colorScheme } = useMantineColorScheme();
+  const { t } = useTranslation();
 
   return (
     <Box
@@ -53,12 +55,12 @@ export function StreamPaused() {
               letterSpacing: '-0.02em',
             }}
           >
-            Stream Paused
+            {t('streamPaused.title')}
           </Text>
           <Text size="sm" c="dimmed" ta="center">
-            The broadcaster has paused the stream.
+            {t('streamPaused.description')}
             <br />
-            It will resume shortly...
+            {t('streamPaused.resumeShortly')}
           </Text>
         </Stack>
 

@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Fast & Curiious — Live",
+    "streamId": "Yayın Kimliği"
+  },
+  "stats": {
+    "waitingForData": "Yayın verileri bekleniyor...",
+    "hp": "BG",
+    "currentSpeed": "Mevcut Hız",
+    "kmh": "km/sa",
+    "duration": "Süre",
+    "distance": "Mesafe",
+    "km": "km",
+    "maxSpeed": "Maks. Hız",
+    "progress": "İlerleme",
+    "from": "Nereden",
+    "to": "Nereye",
+    "expectedTime": "Tahmini Süre",
+    "expectedDistance": "Tahmini Mesafe"
+  },
+  "connection": {
+    "live": "Canlı",
+    "connecting": "Bağlanıyor...",
+    "disconnected": "Bağlantı kesildi",
+    "connectionError": "Bağlantı Hatası",
+    "streamClosed": "Yayın Kapatıldı",
+    "reconnect": "Yeniden Bağlan"
+  },
+  "streamClosed": {
+    "title": "Yayın Sona Erdi",
+    "description": "Bu yayın yayıncı tarafından kapatıldı. Yolculuk sona erdi.",
+    "streamId": "Yayın Kimliği",
+    "thankYou": "İzlediğiniz için teşekkürler!"
+  },
+  "streamPaused": {
+    "title": "Yayın Duraklatıldı",
+    "description": "Yayıncı yayını duraklattı.",
+    "resumeShortly": "Kısa süre içinde devam edecek..."
+  },
+  "notFound": {
+    "title": "Yayın Bulunamadı",
+    "description": "Bu yayın kimliği mevcut değil veya süresi dolmuş.",
+    "checkUrl": "Lütfen URL'yi kontrol edin ve tekrar deneyin.",
+    "addStreamId": "URL'ye şu şekilde bir yayın kimliği ekleyin:",
+    "refreshPage": "Sayfayı Yenile"
+  },
+  "language": {
+    "select": "Dil Seçin"
+  }
+}

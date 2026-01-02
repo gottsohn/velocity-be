@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Fast & Curiious — Live",
+    "streamId": "ID Nkwusa"
+  },
+  "stats": {
+    "waitingForData": "Na-eche data nkwusa...",
+    "hp": "HP",
+    "currentSpeed": "Ọsọ ugbu a",
+    "kmh": "km/awa",
+    "duration": "Oge",
+    "distance": "Ụzọ",
+    "km": "km",
+    "maxSpeed": "Ọsọ kachasị",
+    "progress": "Ọganihu",
+    "from": "Site na",
+    "to": "Ruo",
+    "expectedTime": "Oge a tụrụ anya",
+    "expectedDistance": "Ụzọ a tụrụ anya"
+  },
+  "connection": {
+    "live": "Na-aga",
+    "connecting": "Na-ejikọ...",
+    "disconnected": "Akwụsịla",
+    "connectionError": "Njikọ mebiri",
+    "streamClosed": "Nkwusa mechiri",
+    "reconnect": "Jikọọ ọzọ"
+  },
+  "streamClosed": {
+    "title": "Nkwusa gwụrụ",
+    "description": "Onye na-ekwusa mechiri nkwusa a. Njem ahụ gwụla.",
+    "streamId": "ID Nkwusa",
+    "thankYou": "Daalụ maka ile!"
+  },
+  "streamPaused": {
+    "title": "Nkwusa kwụsịrị",
+    "description": "Onye na-ekwusa kwụsịrị nkwusa.",
+    "resumeShortly": "Ọ ga-amalite ọzọ n'oge na-adịghị anya..."
+  },
+  "notFound": {
+    "title": "Ahụghị Nkwusa",
+    "description": "ID nkwusa a adịghị ma ọ bụ ọ gwụla.",
+    "checkUrl": "Biko nyochaa URL ma gbalịa ọzọ.",
+    "addStreamId": "Tinye ID nkwusa na URL dị ka nke a:",
+    "refreshPage": "Mee ka peeji ọhụrụ"
+  },
+  "language": {
+    "select": "Họrọ Asụsụ"
+  }
+}

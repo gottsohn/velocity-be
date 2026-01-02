@@ -1,0 +1,50 @@
+{
+  "dashboard": {
+    "title": "Fast & Curiious — Live",
+    "streamId": "Stream ID"
+  },
+  "stats": {
+    "waitingForData": "Dey wait for stream data...",
+    "hp": "HP",
+    "currentSpeed": "Speed Wey Dey Now",
+    "kmh": "km/h",
+    "duration": "How Long",
+    "distance": "How Far",
+    "km": "km",
+    "maxSpeed": "Highest Speed",
+    "progress": "How Far We Reach",
+    "from": "From",
+    "to": "Go To",
+    "expectedTime": "Time Wey We Expect",
+    "expectedDistance": "Distance Wey We Expect"
+  },
+  "connection": {
+    "live": "Dey Live",
+    "connecting": "Dey Connect...",
+    "disconnected": "E Cut",
+    "connectionError": "Connection Get Problem",
+    "streamClosed": "Stream Don Close",
+    "reconnect": "Connect Again"
+  },
+  "streamClosed": {
+    "title": "Stream Don Finish",
+    "description": "Di person wey dey broadcast don close this stream. Di journey don end.",
+    "streamId": "Stream ID",
+    "thankYou": "Thank you for watching!"
+  },
+  "streamPaused": {
+    "title": "Stream Dey Pause",
+    "description": "Di broadcaster pause am.",
+    "resumeShortly": "E go continue soon..."
+  },
+  "notFound": {
+    "title": "Stream No Dey",
+    "description": "Dis stream ID no dey or e don expire.",
+    "checkUrl": "Abeg check di URL again.",
+    "addStreamId": "Put stream ID for URL like dis:",
+    "refreshPage": "Refresh Page"
+  },
+  "language": {
+    "select": "Choose Language"
+  }
+}
