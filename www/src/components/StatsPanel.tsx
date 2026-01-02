@@ -158,7 +158,7 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
             </Text>
             <Group gap="xs">
               <Badge variant="light" color="orange" size="sm">
-                {streamData.car.horsePower} HP
+                {streamData.car?.horsePower ?? "-"} HP
               </Badge>
             </Group>
           </Stack>

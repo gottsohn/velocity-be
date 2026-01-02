@@ -41,7 +41,7 @@ export interface StreamData {
   destinationCity: string;
   destinationName: string;
   expectedDistanceKm?: number;
-  car: Car;
+  car?: Car;
   isPaused: boolean;
 }
 
