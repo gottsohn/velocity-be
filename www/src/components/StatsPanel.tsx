@@ -154,7 +154,7 @@ export function StatsPanel({ streamData }: StatsPanelProps) {
         <Group justify="space-between" align="center">
           <Stack gap={2}>
             <Text size="lg" fw={700}>
-              {streamData.car.name} {streamData.car.model}
+              {streamData.car ? streamData.car.name + " " + streamData.car.model : "-"}
             </Text>
             <Group gap="xs">
               <Badge variant="light" color="orange" size="sm">
