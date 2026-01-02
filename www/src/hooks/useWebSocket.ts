@@ -39,6 +39,7 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
   const isConnectingRef = useRef(false);
   const isStreamClosedRef = useRef(false);
   const isMountedRef = useRef(false);
+  const connectRef = useRef<() => void>(() => {});
 
   // Check if stream exists and is not deleted before connecting
   const checkStreamStatus = useCallback(async (): Promise<boolean> => {
@@ -190,7 +191,7 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
             reconnectTimeoutRef.current = setTimeout(() => {
               reconnectAttempts.current++;
                
-              connect();
+              connectRef.current();
             }, delay);
           }
         }
@@ -201,6 +202,11 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
       setStatus('error');
     }
   }, [streamId, checkStreamStatus]);
+
+  // Keep the ref updated with the latest connect function (in an effect to avoid lint errors)
+  useEffect(() => {
+    connectRef.current = connect;
+  }, [connect]);
 
   const reconnect = useCallback(() => {
     if (connectTimeoutRef.current) {
@@ -232,7 +238,7 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
     // The first mount's timeout gets cancelled during cleanup,
     // so only the second mount's connection actually executes
     connectTimeoutRef.current = setTimeout(() => {
-      connect();
+      connectRef.current();
     }, 0);
 
     return () => {
@@ -253,7 +259,7 @@ export function useWebSocket(streamId: string | null): UseWebSocketResult {
       }
       isConnectingRef.current = false;
     };
-  }, [streamId]); // Only depend on streamId, not connect
+  }, [streamId]);
 
   return { streamData, status, error, reconnect, isStreamClosed };
 }
