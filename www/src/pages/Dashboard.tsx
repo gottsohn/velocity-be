@@ -1,10 +1,10 @@
 import {
-  Container, 
-  Grid, 
-  Paper, 
-  Title, 
-  Text, 
-  Group, 
+  Container,
+  Grid,
+  Paper,
+  Title,
+  Text,
+  Group,
   ActionIcon,
   useMantineColorScheme,
   Box,
@@ -37,7 +37,7 @@ export function Dashboard({ streamId }: DashboardProps) {
     <Box
       style={{
         minHeight: '100vh',
-        background: colorScheme === 'dark' 
+        background: colorScheme === 'dark'
           ? 'radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a0a 50%, #000 100%)'
           : 'radial-gradient(ellipse at top, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%)',
         position: 'relative',
@@ -73,8 +73,8 @@ export function Dashboard({ streamId }: DashboardProps) {
           {(styles) => (
             <Stack gap="lg" style={styles}>
               {/* Header */}
-              <Paper 
-                p="lg" 
+              <Paper
+                p="lg"
                 radius="lg"
                 style={{
                   background: colorScheme === 'dark'
@@ -98,12 +98,12 @@ export function Dashboard({ streamId }: DashboardProps) {
                       </Text>
                     </Stack>
                   </Group>
-                  
+
                   <Group gap="md">
                     <ConnectionStatus status={status} onReconnect={reconnect} />
-                    <ActionIcon 
-                      variant="light" 
-                      size="lg" 
+                    <ActionIcon
+                      variant="light"
+                      size="lg"
                       radius="xl"
                       onClick={() => toggleColorScheme()}
                       color="gray"
@@ -116,9 +116,9 @@ export function Dashboard({ streamId }: DashboardProps) {
 
               {/* Error message */}
               {error && !isStreamClosed && (
-                <Paper 
-                  p="md" 
-                  radius="md" 
+                <Paper
+                  p="md"
+                  radius="md"
                   style={{
                     background: 'rgba(239, 68, 68, 0.1)',
                     border: '1px solid rgba(239, 68, 68, 0.3)',
@@ -134,11 +134,13 @@ export function Dashboard({ streamId }: DashboardProps) {
               <Grid gutter="lg">
                 {/* Map section */}
                 <Grid.Col span={{ base: 12, md: 8 }}>
+                  {/* Stream paused overlay */}
+                  {streamData?.isPaused && <StreamPaused />}
                   <Transition mounted={mounted} transition="slide-right" duration={600}>
                     {(styles) => (
-                      <Paper 
-                        p={0} 
-                        radius="lg" 
+                      <Paper
+                        p={0}
+                        radius="lg"
                         style={{
                           ...styles,
                           height: 'calc(100vh - 200px)',
@@ -155,8 +157,6 @@ export function Dashboard({ streamId }: DashboardProps) {
                         }}
                       >
                         <RouteMap streamData={streamData} />
-                        {/* Stream paused overlay */}
-                        {streamData?.isPaused && <StreamPaused />}
                       </Paper>
                     )}
                   </Transition>
@@ -166,7 +166,7 @@ export function Dashboard({ streamId }: DashboardProps) {
                 <Grid.Col span={{ base: 12, md: 4 }}>
                   <Transition mounted={mounted} transition="slide-left" duration={600} timingFunction="ease">
                     {(styles) => (
-                      <Box 
+                      <Box
                         style={{
                           ...styles,
                           height: 'calc(100vh - 200px)',

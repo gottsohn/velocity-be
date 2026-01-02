@@ -1,6 +1,32 @@
-import { useMemo } from 'react';
+import { useState } from 'react';
 import { Paper, Group, Stack, Text, Badge, ThemeIcon, useMantineTheme } from '@mantine/core';
 import type { StreamData } from '../types/stream';
+
+interface CachedAddressData {
+  startAddressLine: string;
+  startPostalCode: string;
+  startCity: string;
+  endAddressLine: string;
+  endPostalCode: string;
+  endCity: string;
+  destinationAddressLine: string;
+  destinationPostalCode: string;
+  destinationCity: string;
+  destinationName: string;
+}
+
+const defaultAddressData: CachedAddressData = {
+  startAddressLine: '',
+  startPostalCode: '',
+  startCity: '',
+  endAddressLine: '',
+  endPostalCode: '',
+  endCity: '',
+  destinationAddressLine: '',
+  destinationPostalCode: '',
+  destinationCity: '',
+  destinationName: '',
+};
 
 interface StatsPanelProps {
   streamData: StreamData | null;
@@ -74,19 +100,30 @@ function StatCard({
 }
 
 export function StatsPanel({ streamData }: StatsPanelProps) {
-  // Compute address data directly from streamData
-  const addressData = useMemo(() => ({
-    startAddressLine: streamData?.startAddressLine || '',
-    startPostalCode: streamData?.startPostalCode || '',
-    startCity: streamData?.startCity || '',
-    endAddressLine: streamData?.endAddressLine || '',
-    endPostalCode: streamData?.endPostalCode || '',
-    endCity: streamData?.endCity || '',
-    destinationAddressLine: streamData?.destinationAddressLine || '',
-    destinationPostalCode: streamData?.destinationPostalCode || '',
-    destinationCity: streamData?.destinationCity || '',
-    destinationName: streamData?.destinationName || '',
-  }), [streamData]);
+  // Cache address data - only update when new non-empty values are received
+  const [addressData, setAddressData] = useState<CachedAddressData>(defaultAddressData);
+  const [prevStreamData, setPrevStreamData] = useState<StreamData | null>(null);
+
+  // Update cached values during render (React-approved pattern for derived state)
+  // This avoids cascading renders from useEffect + setState
+  if (streamData !== prevStreamData) {
+    setPrevStreamData(streamData);
+    if (streamData) {
+      const nextAddressData = {
+        startAddressLine: streamData.startAddressLine || addressData.startAddressLine,
+        startPostalCode: streamData.startPostalCode || addressData.startPostalCode,
+        startCity: streamData.startCity || addressData.startCity,
+        endAddressLine: streamData.endAddressLine || addressData.endAddressLine,
+        endPostalCode: streamData.endPostalCode || addressData.endPostalCode,
+        endCity: streamData.endCity || addressData.endCity,
+        destinationAddressLine: streamData.destinationAddressLine || addressData.destinationAddressLine,
+        destinationPostalCode: streamData.destinationPostalCode || addressData.destinationPostalCode,
+        destinationCity: streamData.destinationCity || addressData.destinationCity,
+        destinationName: streamData.destinationName || addressData.destinationName,
+      };
+      setAddressData(nextAddressData);
+    }
+  }
 
   if (!streamData) {
     return (
